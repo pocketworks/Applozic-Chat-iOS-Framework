@@ -96,6 +96,8 @@
 		46ABAAD81DA4054000EC48AC /* ContactsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46ABAAD61DA4054000EC48AC /* ContactsUI.framework */; };
 		46B258A01E5B03300078BBA5 /* ALChannelMsgCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 46B2589E1E5B03300078BBA5 /* ALChannelMsgCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		46B258A11E5B03300078BBA5 /* ALChannelMsgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46B2589F1E5B03300078BBA5 /* ALChannelMsgCell.m */; };
+		496689BD21ECEA9700C5D04C /* BRSForceTouchRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 496689BB21ECEA9700C5D04C /* BRSForceTouchRecognizer.h */; };
+		496689BE21ECEA9700C5D04C /* BRSForceTouchRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 496689BC21ECEA9700C5D04C /* BRSForceTouchRecognizer.m */; };
 		6D0877081D01B0F900DB491A /* UIView+Toast.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D0877071D01B0F900DB491A /* UIView+Toast.h */; };
 		6D08770A1D01B0FE00DB491A /* UIView+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0877091D01B0FE00DB491A /* UIView+Toast.m */; };
 		6D0D107A1D4CD7B6009853FB /* ALImagePickerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D0D10781D4CD7B6009853FB /* ALImagePickerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -493,6 +495,8 @@
 		46ABAAD61DA4054000EC48AC /* ContactsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ContactsUI.framework; path = System/Library/Frameworks/ContactsUI.framework; sourceTree = SDKROOT; };
 		46B2589E1E5B03300078BBA5 /* ALChannelMsgCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALChannelMsgCell.h; path = Applozic/ALChannelMsgCell.h; sourceTree = "<group>"; };
 		46B2589F1E5B03300078BBA5 /* ALChannelMsgCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALChannelMsgCell.m; path = Applozic/ALChannelMsgCell.m; sourceTree = "<group>"; };
+		496689BB21ECEA9700C5D04C /* BRSForceTouchRecognizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BRSForceTouchRecognizer.h; sourceTree = "<group>"; };
+		496689BC21ECEA9700C5D04C /* BRSForceTouchRecognizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BRSForceTouchRecognizer.m; sourceTree = "<group>"; };
 		61F85D44BCB97CB78AA5B43A /* libPods-Applozic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Applozic.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D0877071D01B0F900DB491A /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Toast.h"; sourceTree = "<group>"; };
 		6D0877091D01B0FE00DB491A /* UIView+Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Toast.m"; sourceTree = "<group>"; };
@@ -1021,6 +1025,8 @@
 				29C849A01CC932050042643C /* NSString+Encode.h */,
 				29C849A11CC932050042643C /* NSString+Encode.m */,
 				29D6F8681D193D9000A75369 /* TEXT VIEW */,
+				496689BB21ECEA9700C5D04C /* BRSForceTouchRecognizer.h */,
+				496689BC21ECEA9700C5D04C /* BRSForceTouchRecognizer.m */,
 			);
 			name = Utilities;
 			path = Applozic/Utilities;
@@ -1723,6 +1729,7 @@
 				6D6DF1C91BC5364C00EBA00F /* UIImage+MultiFormat.h in Headers */,
 				6D6DF1C51BC5364C00EBA00F /* UIButton+WebCache.h in Headers */,
 				6D6DF1C71BC5364C00EBA00F /* UIImage+GIF.h in Headers */,
+				496689BD21ECEA9700C5D04C /* BRSForceTouchRecognizer.h in Headers */,
 				6D6DF1B41BC5364C00EBA00F /* NSData+ImageContentType.h in Headers */,
 				6D6DF1CB1BC5364C00EBA00F /* UIImage+WebP.h in Headers */,
 				6D6DF1C31BC5364C00EBA00F /* SDWebImagePrefetcher.h in Headers */,
@@ -2022,6 +2029,7 @@
 				6D7756E01D5B82000025560B /* ALUserDetail.m in Sources */,
 				6D77571E1D5B838A0025560B /* ALSendMessageResponse.m in Sources */,
 				6D6DF1551BC5364C00EBA00F /* UIImage+Utility.m in Sources */,
+				496689BE21ECEA9700C5D04C /* BRSForceTouchRecognizer.m in Sources */,
 				6D46B6C61BD025060014A5D3 /* ALMapViewController.m in Sources */,
 				6DEAEE8D1D4CDBC700360060 /* ALUserProfileVC.m in Sources */,
 				6D6DF1531BC5364C00EBA00F /* ALUtilityClass.m in Sources */,
