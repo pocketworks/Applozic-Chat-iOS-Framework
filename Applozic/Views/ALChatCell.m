@@ -690,13 +690,20 @@
         }
         else
         {
-            if([substring hasPrefix:@"http"])
-            {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:substring]];
-            }
-            else
-            {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@",substring]]];
+            if ([substring containsString:@"//SOMEURL/tripchecks"]) {
+
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"CT_START_TRIP_CHECK" object:substring];
+
+            } else {
+
+                if([substring hasPrefix:@"http"])
+                {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:substring]];
+                }
+                else
+                {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://%@",substring]]];
+                }
             }
         }
     };
