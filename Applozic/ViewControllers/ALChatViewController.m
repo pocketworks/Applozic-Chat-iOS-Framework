@@ -2691,7 +2691,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage * clickImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+    UIImage *clickImage = [info valueForKey:UIImagePickerControllerEditedImage] ?: [info valueForKey:UIImagePickerControllerOriginalImage];
     UIImage * image = [ALUtilityClass getNormalizedImage:clickImage];
     image = [image getCompressedImageLessThanSize:5];
 
