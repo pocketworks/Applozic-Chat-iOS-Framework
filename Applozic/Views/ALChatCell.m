@@ -690,7 +690,7 @@
         }
         else
         {
-            if ([substring containsString:@"//SOMEURL/tripchecks"]) {
+            if ([substring containsString:@"tripchecks"]) {
 
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"CT_START_TRIP_CHECK" object:substring];
 
