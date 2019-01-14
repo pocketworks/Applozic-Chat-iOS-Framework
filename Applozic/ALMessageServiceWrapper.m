@@ -198,17 +198,56 @@ andWithStatusDelegate:(id)statusDelegate
         NSArray *componentsArray = [messageEntity.fileMetaInfo.name componentsSeparatedByString:@"."];
         NSString *fileExtension = [componentsArray lastObject];
         NSString * filePath = [docPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_local.%@",connection.keystring,fileExtension]];
+        NSString * fileName = [NSString stringWithFormat:@"%@_local.%@",connection.keystring,fileExtension];
+        
+        if (messageEntity.contentType == ALMESSAGE_CONTENT_APP_GALLERY_LINK && messageEntity.metadata != nil) {
+            NSDictionary * metadata = [self getMetaDataDictionary:messageEntity.metadata];
+            NSURL * url = [[NSURL alloc] initWithString:metadata[@"COTY_LINK"]];
+            fileName = url.lastPathComponent;
+            filePath = [docPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", fileName]];
+        }
+        
         [connection.mData writeToFile:filePath atomically:YES];
         
         // UPDATE DB
         messageEntity.inProgress = [NSNumber numberWithBool:NO];
         messageEntity.isUploadFailed=[NSNumber numberWithBool:NO];
-        messageEntity.filePath = [NSString stringWithFormat:@"%@_local.%@",connection.keystring,fileExtension];
+        messageEntity.filePath = fileName;
         [[ALDBHandler sharedInstance].managedObjectContext save:nil];
         ALMessage * almessage = [[ALMessageDBService new ] createMessageEntity:messageEntity];
         [self.messageServiceDelegate DownloadCompleted:almessage];
     }
     
+}
+
+-(NSMutableDictionary *)getMetaDataDictionary:(NSString *)string
+{
+    NSData * data = [string dataUsingEncoding:NSUTF8StringEncoding];
+    //    NSString * error;
+    NSPropertyListFormat format;
+    NSMutableDictionary * metaDataDictionary;
+    //    NSMutableDictionary * metaDataDictionary = [NSPropertyListSerialization
+    //                          propertyListFromData:data
+    //                          mutabilityOption:NSPropertyListImmutable
+    //                          format:&format
+    //                          errorDescription:&error];
+    @try
+    {
+        NSError * error;
+        metaDataDictionary = [NSPropertyListSerialization propertyListWithData:data options:NSPropertyListImmutable
+                                                                        format:&format
+                                                                         error:&error];
+        if(!metaDataDictionary)
+        {
+            //            NSLog(@"ERROR: COULD NOT PARSE META-DATA : %@", error.description);
+        }
+    }
+    @catch(NSException * exp)
+    {
+        //         NSLog(@"METADATA_DICTIONARY_EXCEPTION :: %@", exp.description);
+    }
+    
+    return metaDataDictionary;
 }
 
 -(void)connection:(ALConnection *)connection didReceiveData:(NSData *)data{

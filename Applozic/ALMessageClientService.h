@@ -44,7 +44,7 @@
 
 -(void)getMessageListForUser:(MessageListRequest *)messageListRequest withOpenGroup:(BOOL)isOpenGroup withCompletion:(void (^)(NSMutableArray *, NSError *, NSMutableArray *))completion;
 
--(void) downloadImageUrl: (NSString *) blobKey withCompletion:(void(^)(NSString * fileURL, NSError *error)) completion;
+-(void) downloadImageUrl: (NSString *) blobKey withMessage:(ALMessage *) message withCompletion:(void(^)(NSString * fileURL, NSError *error)) completion;
 -(void) downloadImageThumbnailUrl: (ALMessage *) message withCompletion:(void(^)(NSString * fileURL, NSError *error)) completion;
 
 -(void) downloadImageUrlAndSet: (NSString *) blobKey imageView:(UIImageView *) imageView defaultImage:(NSString *) defaultImage;

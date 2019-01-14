@@ -726,7 +726,7 @@ withAttachmentAtLocation:(NSString *)attachmentLocalPath
 +(void) processImageDownloadforMessage:(ALMessage *) message withDelegate:(id)delegate withCompletionHandler:(void (^)(NSError *))completion{
     
     ALMessageClientService * messageClientService = [[ALMessageClientService alloc]init];
-    [messageClientService downloadImageUrl:message.fileMeta.blobKey withCompletion:^(NSString *fileURL, NSError *error) {
+    [messageClientService downloadImageUrl:message.fileMeta.blobKey withMessage:message withCompletion:^(NSString *fileURL, NSError *error) {
         if(error)
         {
             ALSLog(ALLoggerSeverityError, @"ERROR GETTING DOWNLOAD URL : %@", error);

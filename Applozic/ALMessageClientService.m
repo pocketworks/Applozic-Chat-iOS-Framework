@@ -63,8 +63,8 @@
 
 }
 
--(void) downloadImageUrl: (NSString *) blobKey withCompletion:(void(^)(NSString * fileURL, NSError *error)) completion{
-     [self getNSMutableURLRequestForImage:blobKey withCompletion:^(NSMutableURLRequest *urlRequest, NSString *fileUrl) {
+-(void) downloadImageUrl: (NSString *) blobKey withMessage:(ALMessage *) message withCompletion:(void(^)(NSString * fileURL, NSError *error)) completion{
+    [self getNSMutableURLRequestForImage:blobKey withMessage:message withCompletion:^(NSMutableURLRequest *urlRequest, NSString *fileUrl) {
          NSMutableURLRequest * nsMutableURLRequest = urlRequest;
 
          if(nsMutableURLRequest){
@@ -87,10 +87,16 @@
     
 }
 
--(void)getNSMutableURLRequestForImage:(NSString *) blobKey  withCompletion:(void(^)(NSMutableURLRequest * urlRequest, NSString *fileUrl)) completion{
+-(void)getNSMutableURLRequestForImage:(NSString *) blobKey withMessage:(ALMessage *) message withCompletion:(void(^)(NSMutableURLRequest * urlRequest, NSString *fileUrl)) completion{
     
     NSMutableURLRequest * urlRequest = [[NSMutableURLRequest alloc] init];
-    if([ALApplozicSettings isGoogleCloudServiceEnabled]){
+    if(message.contentType == ALMESSAGE_CONTENT_APP_GALLERY_LINK && message.metadata[@"COTY_LINK"] != nil) {
+        NSString *urlString = message.metadata[@"COTY_LINK"];
+        urlRequest = [ALRequestHandler createGETRequestWithUrlStringWithoutHeader:urlString paramString:nil];
+        NSString* token = [[NSUserDefaults standardUserDefaults] objectForKey:@"brass_api_token"];
+        [urlRequest addValue:[[NSString alloc] initWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+    }
+    else if([ALApplozicSettings isGoogleCloudServiceEnabled]){
         NSString * theUrlString = [NSString stringWithFormat:@"%@/files/url",KBASE_FILE_URL];
         NSString * blobParamString = [@"" stringByAppendingFormat:@"key=%@",blobKey];
         urlRequest = [ALRequestHandler createGETRequestWithUrlString:theUrlString paramString:blobParamString];

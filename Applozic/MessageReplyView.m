@@ -251,7 +251,7 @@
             else
             {
                 ALMessageClientService * messageClientService = [[ALMessageClientService alloc]init];
-                [messageClientService downloadImageUrl:replyMessage.fileMeta.thumbnailBlobKey withCompletion:^(NSString *fileURL, NSError *error) {
+                [messageClientService downloadImageUrl:replyMessage.fileMeta.thumbnailBlobKey withMessage:replyMessage withCompletion:^(NSString *fileURL, NSError *error) {
                     if(error)
                     {
                         ALSLog(ALLoggerSeverityError, @"ERROR GETTING DOWNLOAD URL : %@", error);

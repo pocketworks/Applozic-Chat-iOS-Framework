@@ -178,6 +178,9 @@
     {
         heightOfCell = [self getLinkCelllHeight:alMessage andCellFrame:cellFrame] ;
     }
+    else if(alMessage.contentType == ALMESSAGE_CONTENT_APP_GALLERY_LINK) {
+        heightOfCell = [self getImageCellHeight:alMessage andCellFrame:cellFrame] ;
+    }
     else if([alMessage.type isEqualToString:@"100"])
     {
         heightOfCell=  [self getDateCellHeight];

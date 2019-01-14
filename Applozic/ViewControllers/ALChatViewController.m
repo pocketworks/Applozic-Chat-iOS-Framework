@@ -2593,6 +2593,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
         NSArray *componentsArray = [messageEntity.fileMetaInfo.name componentsSeparatedByString:@"."];
         NSString *fileExtension = [componentsArray lastObject];
         NSString * filePath = [docPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_thumbnail_local.%@",connection.keystring,fileExtension]];
+        
         [connection.mData writeToFile:filePath atomically:YES];
 
         // UPDATE DB
@@ -2614,6 +2615,15 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
         NSArray *componentsArray = [messageEntity.fileMetaInfo.name componentsSeparatedByString:@"."];
         NSString *fileExtension = [componentsArray lastObject];
         NSString * filePath = [docPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_local.%@",connection.keystring,fileExtension]];
+        NSString *fileName = [NSString stringWithFormat:@"%@_local.%@",connection.keystring,fileExtension];
+        
+        if (messageEntity.contentType == ALMESSAGE_CONTENT_APP_GALLERY_LINK && messageEntity.metadata != nil) {
+            NSDictionary * metadata = [self getMetaDataDictionary:messageEntity.metadata];
+            NSURL * url = [[NSURL alloc] initWithString:metadata[@"COTY_LINK"]];
+            fileName = url.lastPathComponent;
+            filePath = [docPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", fileName]];
+        }
+        
         [connection.mData writeToFile:filePath atomically:YES];
 
         // If 'save video to gallery' is enabled then save to gallery
@@ -2623,7 +2633,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
         // UPDATE DB
         messageEntity.inProgress = [NSNumber numberWithBool:NO];
         messageEntity.isUploadFailed=[NSNumber numberWithBool:NO];
-        messageEntity.filePath = [NSString stringWithFormat:@"%@_local.%@",connection.keystring,fileExtension];
+        messageEntity.filePath = fileName;
         [[ALDBHandler sharedInstance].managedObjectContext save:nil];
 
         ALMessage * message = [self getMessageFromViewList:@"key" withValue:connection.keystring];
@@ -2635,6 +2645,36 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
             [self.mTableView reloadData];
         }
     }
+}
+
+-(NSMutableDictionary *)getMetaDataDictionary:(NSString *)string
+{
+    NSData * data = [string dataUsingEncoding:NSUTF8StringEncoding];
+    //    NSString * error;
+    NSPropertyListFormat format;
+    NSMutableDictionary * metaDataDictionary;
+    //    NSMutableDictionary * metaDataDictionary = [NSPropertyListSerialization
+    //                          propertyListFromData:data
+    //                          mutabilityOption:NSPropertyListImmutable
+    //                          format:&format
+    //                          errorDescription:&error];
+    @try
+    {
+        NSError * error;
+        metaDataDictionary = [NSPropertyListSerialization propertyListWithData:data options:NSPropertyListImmutable
+                                                                        format:&format
+                                                                         error:&error];
+        if(!metaDataDictionary)
+        {
+            //            NSLog(@"ERROR: COULD NOT PARSE META-DATA : %@", error.description);
+        }
+    }
+    @catch(NSException * exp)
+    {
+        //         NSLog(@"METADATA_DICTIONARY_EXCEPTION :: %@", exp.description);
+    }
+    
+    return metaDataDictionary;
 }
 
 -(void) thumbnailDownload:(NSString *) key withThumbnailUrl:(NSString *) thumbnailUrl{
@@ -3380,10 +3420,13 @@ style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
     theMessage.to = self.contactIds;
     theMessage.createdAtTime = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970] * 1000];
     theMessage.deviceKey = [ALUserDefaultsHandler getDeviceKeyString];
-    theMessage.message = @"App Gallery Image";
+    theMessage.message = @"";
     theMessage.sendToDevice = NO;
     theMessage.shared = NO;
+    theMessage.imageFilePath = nil;// [[NSURL alloc] initWithString:link].lastPathComponent;
     theMessage.fileMeta = [self getFileMetaInfo];
+    theMessage.fileMeta.name = [[NSURL alloc] initWithString:link].lastPathComponent;
+    theMessage.fileMeta.url = link;
     theMessage.fileMeta.thumbnailUrl = link;
     theMessage.storeOnDevice = NO;
     theMessage.key = [[NSUUID UUID] UUIDString];
@@ -3393,6 +3436,9 @@ style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
     theMessage.groupId = self.channelKey;
     theMessage.conversationId  = self.conversationId;
     theMessage.source = SOURCE_IOS;
+    
+    NSDictionary* metaData = @{@"COTY_LINK" : link};
+    theMessage.metadata = [metaData mutableCopy];
     
     return theMessage;
 }
@@ -4714,7 +4760,7 @@ style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             else
             {
                 ALMessageClientService * messageClientService = [[ALMessageClientService alloc]init];
-                [messageClientService downloadImageUrl:message.fileMeta.thumbnailBlobKey withCompletion:^(NSString *fileURL, NSError *error) {
+                [messageClientService downloadImageUrl:message.fileMeta.thumbnailBlobKey withMessage:message withCompletion:^(NSString *fileURL, NSError *error) {
                     if(error)
                     {
                         ALSLog(ALLoggerSeverityError, @"ERROR GETTING DOWNLOAD URL : %@", error);

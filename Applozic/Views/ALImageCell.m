@@ -433,6 +433,10 @@ UIViewController * modalCon;
     self.mDateLabel.text = theDate;
     
     theUrl = nil;
+    
+    NSLog(@"****\n**** %@\n****", alMessage.imageFilePath);
+    NSLog(@"****\n**** %@\n****", alMessage.fileMeta.thumbnailUrl);
+    NSLog(@"Message: %@", [alMessage description]);
 
     if (alMessage.imageFilePath != NULL)
     {
