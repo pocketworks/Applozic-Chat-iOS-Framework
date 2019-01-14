@@ -99,7 +99,7 @@
         [self.contentView addSubview:self.documentName];
         
         self.downloadRetryView = [UIView new];
-        [self.downloadRetryView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.6]];
+        [self.downloadRetryView setBackgroundColor:[UIColor colorWithRed:60.0f/255.0 green:16.0f/255.0f blue:83.0f/255.0f alpha:1.0f]];
         [self.contentView addSubview:self.downloadRetryView];
         self.downloadRetryView.layer.cornerRadius = 5;
         self.downloadRetryView.layer.masksToBounds = YES;
