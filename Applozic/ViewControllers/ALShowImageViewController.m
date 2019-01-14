@@ -46,6 +46,10 @@
     [self.navigationBar addSubview:[ALUtilityClass setStatusBarStyle]];
 }
 
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return [ALApplozicSettings getStatusBarStyle];
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];

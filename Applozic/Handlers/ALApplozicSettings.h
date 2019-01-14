@@ -5,7 +5,8 @@
 //  Created by devashish on 20/11/2015.
 //  Copyright © 2015 applozic Inc. All rights reserved.
 //
-
+#define PRIMARY_COLOUR @"com.applozic.userdefault.PRIMARY_COLOUR"
+#define PRIMARY_TEXT_COLOUR @"com.applozic.userdefault.PRIMARY_TEXT_COLOUR"
 #define USER_PROFILE_PROPERTY @"com.applozic.userdefault.USER_PROFILE_PROPERTY"
 #define SEND_MSG_COLOUR @"com.applozic.userdefault.SEND_MSG_COLOUR"
 #define RECEIVE_MSG_COLOUR @"com.applozic.userdefault.RECEIVE_MSG_COLOUR"
@@ -124,6 +125,11 @@ static NSString *const MEDIA_SELECT_OPTIONS = @"com.applozic.MEDIA_SELECT_OPTION
 #import <UIKit/UIKit.h>
 
 @interface ALApplozicSettings : NSObject
+
++(void)setPrimaryTextColour:(UIColor *)colour;
++(UIColor *)getPrimaryTextColour;
++(void)setPrimaryColour:(UIColor *)colour;
++(UIColor *)getPrimaryColour;
 
 +(void)setFontFace:(NSString *)fontFace;
 +(NSString *)getFontFace;

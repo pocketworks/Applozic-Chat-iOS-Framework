@@ -1719,6 +1719,14 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
         [self.view layoutIfNeeded];
         return theCell;
     }
+   else if(theMessage.contentType == ALMESSAGE_CONTENT_APP_GALLERY_LINK) {
+       ALImageCell *theCell = (ALImageCell *)[tableView dequeueReusableCellWithIdentifier:@"ImageCell"];
+       theCell.tag = indexPath.row;
+       theCell.delegate = self;
+       [theCell populateCell:theMessage viewSize:self.view.frame.size];
+       [self.view layoutIfNeeded];
+       return theCell;
+    }
     else if([theMessage.fileMeta.contentType hasPrefix:@"image"])
     {
         ALImageCell *theCell = (ALImageCell *)[tableView dequeueReusableCellWithIdentifier:@"ImageCell"];
@@ -2939,6 +2947,10 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
         [self openDocuments];
     }]];
     
+    [theController addAction:[UIAlertAction actionWithTitle: NSLocalizedStringWithDefaultValue(@"openAppGallery", nil, [NSBundle mainBundle], @"App Gallery", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self openAppGallery];
+    }]];
+    
     if(![ALApplozicSettings isCameraOptionHidden]){
         [theController addAction:[UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"takePhotoText", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Take photo", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 
@@ -3131,6 +3143,7 @@ style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (granted)
                 {
+                    self.mImagePicker.allowsEditing = YES;
                     self.mImagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
                     self.mImagePicker.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *)kUTTypeImage, nil];
                     [self presentViewController:self.mImagePicker animated:YES completion:nil];
@@ -3278,6 +3291,110 @@ style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                                orRoomId:roomID
                            andCallAudio:callForAudio
                       andViewController:self];
+}
+
+-(void)openAppGallery
+{
+    // TODO Need to make a call into the main library to start this up
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CT_START_APP_GALLERY" object:self];
+    
+    id __block selectToken;
+    id __block dismissToken;
+    
+    selectToken = [[NSNotificationCenter defaultCenter] addObserverForName:@"CT_SELECTION_APP_GALLERY" object:nil queue:nil usingBlock:^(NSNotification * n){
+        NSArray<NSString*> *links = n.object;
+        
+        // Process multiple links
+        for (int i = 0; i < [links count]; i++)
+        {
+            NSString* link = [links objectAtIndex:i];
+            NSLog(@"Linke %@", link);
+            
+            ALMessage* message = [self getAppGalleryMessage: link];
+            
+            //            ALDBHandler * theDBHandler = [ALDBHandler sharedInstance];
+            //            ALMessageDBService* messageDBService = [[ALMessageDBService alloc] init];
+            //            DB_Message * theMessageEntity = [messageDBService createMessageEntityForDBInsertionWithMessage:message];
+            //            [theDBHandler.managedObjectContext save:nil];
+            //            message.msgDBObjectId = [theMessageEntity objectID];
+            //
+            //            [self.alMessageWrapper addALMessageToMessageArray:message];
+            //            [self showNoConversationLabel];
+            //            self.mTotalCount = self.mTotalCount+1;
+            //            self.startIndex = self.startIndex + 1;
+            //            [self sendMessage: message];
+            
+            // save msg to db
+            [self.alMessageWrapper addALMessageToMessageArray:message];
+            
+            ALDBHandler * theDBHandler = [ALDBHandler sharedInstance];
+            ALMessageDBService* messageDBService = [[ALMessageDBService alloc] init];
+            DB_Message * theMessageEntity = [messageDBService createMessageEntityForDBInsertionWithMessage:message];
+            [theDBHandler.managedObjectContext save:nil];
+            message.msgDBObjectId = [theMessageEntity objectID];
+            
+            [self.mTableView reloadData];
+            [self scrollTableViewToBottomWithAnimation:NO];
+            //            [self uploadImage:message];
+            
+            [self.sendMessageTextView setText:nil];
+            self.mTotalCount = self.mTotalCount+1;
+            self.startIndex = self.startIndex + 1;
+            
+            
+            NSError *error = nil;
+            ALMessageDBService  * msgdbService = [[ALMessageDBService alloc] init];
+            DB_Message *dbMessage = (DB_Message*)[msgdbService getMeesageById:message.msgDBObjectId error:&error];
+            message.inProgress = [NSNumber numberWithBool:YES];
+            message.isUploadFailed = [NSNumber numberWithBool:NO];
+            [[ALDBHandler sharedInstance].managedObjectContext save:nil];
+            
+            //            [self sendMessage: message];
+            
+            [[ALMessageService sharedInstance] sendMessages:message withCompletion:^(NSString *message, NSError *error) {
+                if(error)
+                {
+                    // WRITE YOUR LOGIC (IF - ANY)
+                    NSLog(@"Error");
+                }
+            }];
+        }
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:dismissToken];
+        [[NSNotificationCenter defaultCenter] removeObserver:selectToken];
+    }];
+    
+    dismissToken = [[NSNotificationCenter defaultCenter] addObserverForName:@"CT_DISMISS_APP_GALLERY" object:nil queue:nil usingBlock:^(NSNotification * n){
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:dismissToken];
+        [[NSNotificationCenter defaultCenter] removeObserver:selectToken];
+    }];
+}
+
+-(ALMessage *)getAppGalleryMessage: (NSString*) link
+{
+    ALMessage * theMessage = [ALMessage new];
+    
+    theMessage.type = @"5";
+    theMessage.contactIds = self.contactIds;
+    theMessage.to = self.contactIds;
+    theMessage.createdAtTime = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970] * 1000];
+    theMessage.deviceKey = [ALUserDefaultsHandler getDeviceKeyString];
+    theMessage.message = @"App Gallery Image";
+    theMessage.sendToDevice = NO;
+    theMessage.shared = NO;
+    theMessage.fileMeta = [self getFileMetaInfo];
+    theMessage.fileMeta.thumbnailUrl = link;
+    theMessage.storeOnDevice = NO;
+    theMessage.key = [[NSUUID UUID] UUIDString];
+    theMessage.delivered = NO;
+    theMessage.fileMetaKey = nil;
+    theMessage.contentType = ALMESSAGE_CONTENT_APP_GALLERY_LINK;
+    theMessage.groupId = self.channelKey;
+    theMessage.conversationId  = self.conversationId;
+    theMessage.source = SOURCE_IOS;
+    
+    return theMessage;
 }
 
 -(void)deleteConversation{

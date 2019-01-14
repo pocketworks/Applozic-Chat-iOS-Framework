@@ -66,6 +66,10 @@
     }
 }
 
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return [ALApplozicSettings getStatusBarStyle];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

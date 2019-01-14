@@ -107,6 +107,8 @@
         
         self.uploadImageButton.layer.cornerRadius = self.uploadImageButton.frame.size.width/2;
         self.uploadImageButton.layer.masksToBounds = YES;
+        
+        [self.uploadImageButton setBackgroundColor:[ALApplozicSettings getPrimaryColour]];
     });
     
     self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"profileTitle", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Profile", @"");
@@ -171,6 +173,10 @@
     [navigationController.navigationBar setBarTintColor: [ALApplozicSettings getColorForNavigation]];
     [navigationController.navigationBar setTintColor:[ALApplozicSettings getColorForNavigationItem]];
     [navigationController.navigationBar addSubview:[ALUtilityClass setStatusBarStyle]];
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return [ALApplozicSettings getStatusBarStyle];
 }
 
 -(void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated

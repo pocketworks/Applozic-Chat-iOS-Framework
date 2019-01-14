@@ -72,6 +72,8 @@
     self.selectedSegment = 0;
     [ALUserDefaultsHandler setContactServerCallIsDone:NO];
     
+    [self.segmentControl setTintColor: [ALApplozicSettings getPrimaryColour]];
+
     [self.segmentControl setTitle:  NSLocalizedStringWithDefaultValue(@"contactsTitle", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Contacts" , @"") forSegmentAtIndex:0];
     
     [self.segmentControl setTitle:  NSLocalizedStringWithDefaultValue(@"groupsTitle", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Groups" , @"") forSegmentAtIndex:1];
@@ -219,6 +221,10 @@
     self.searchBar.frame = CGRectMake(0,y, self.view.frame.size.width, 40);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUser:) name:@"USER_DETAIL_OTHER_VC" object:nil];
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return [ALApplozicSettings getStatusBarStyle];
 }
 
 -(void)showMQTTNotification:(NSNotification *)notifyObject

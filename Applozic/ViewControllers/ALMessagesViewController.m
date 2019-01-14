@@ -234,6 +234,10 @@
     [self callLastSeenStatusUpdate];
 }
 
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return [ALApplozicSettings getStatusBarStyle];
+}
+
 -(void)intializeSubgroupMessages
 {
     ALChannelService * channelService = [ALChannelService new];
@@ -651,6 +655,7 @@
             UIButton *newBtn = (UIButton*)[contactCell viewWithTag:101];
             [newBtn addTarget:self action:@selector(createGroup:) forControlEvents:UIControlEventTouchUpInside];
             newBtn.userInteractionEnabled = YES;
+            [newBtn setTitleColor:[ALApplozicSettings getPrimaryColour] forState: UIControlStateNormal];
             
             
             [newBtn setTitle:NSLocalizedStringWithDefaultValue(@"createGroupOptionTitle", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Create Group", @"")
@@ -660,6 +665,7 @@
            // Add group button.....
             UIButton *newBroadCast = (UIButton*)[contactCell viewWithTag:102];
             [newBroadCast addTarget:self action:@selector(createBroadcastGroup:) forControlEvents:UIControlEventTouchUpInside];
+            [newBroadCast setTitleColor:[ALApplozicSettings getPrimaryColour] forState: UIControlStateNormal];
             
             [newBroadCast sizeToFit];
             
