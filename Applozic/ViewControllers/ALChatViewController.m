@@ -3106,7 +3106,7 @@ style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 
                 if (granted)
                 {
-                    self.mImagePicker.allowsEditing = YES;
+                    self.mImagePicker.allowsEditing = NO;
                     self.mImagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
                     self.mImagePicker.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *)kUTTypeMovie, nil];
                     self.mImagePicker.videoQuality = UIImagePickerControllerQualityTypeHigh;
