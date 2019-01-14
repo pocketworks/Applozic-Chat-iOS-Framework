@@ -520,7 +520,9 @@
         ALSLog(ALLoggerSeverityInfo, @"RAISED_EXP :: %@",exception.description);
     }
     
-    
+    newContactCell.preservesSuperviewLayoutMargins = false;
+    newContactCell.separatorInset = UIEdgeInsetsMake(0, 8, 0, 8);
+    newContactCell.layoutMargins = UIEdgeInsetsMake(0, 8, 0, 8);
     
     return newContactCell;
 }
