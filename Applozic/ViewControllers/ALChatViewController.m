@@ -1190,6 +1190,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
 
         [self updateLastSeenAtStatus:userDetail];
     }
+
 }
 
 -(void)channelDeleted
@@ -2766,9 +2767,12 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
 
     if(image)
     {
+
+        [self openJot: image];
+
         // SAVE IMAGE TO DOC.
-        NSString * filePath = [ALImagePickerHandler saveImageToDocDirectory:image];
-        [self processAttachment:filePath andMessageText:@"" andContentType:ALMESSAGE_CONTENT_ATTACHMENT];
+//        NSString * filePath = [ALImagePickerHandler saveImageToDocDirectory:image];
+//        [self processAttachment:filePath andMessageText:@"" andContentType:ALMESSAGE_CONTENT_ATTACHMENT];
     }
 
     // VIDEO ATTACHMENT
@@ -3456,6 +3460,35 @@ style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
     
     return theMessage;
 }
+
+-(void)openJot: (UIImage*) originalImage
+{
+    NSDictionary* dict = @{@"viewController": self, @"originalImage" : originalImage};
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CT_START_JOT" object:dict];
+
+    id __block selectToken;
+    id __block dismissToken;
+
+    selectToken = [[NSNotificationCenter defaultCenter] addObserverForName:@"CT_JOT_SAVE" object:nil queue:nil usingBlock:^(NSNotification * n){
+
+        UIImage* image = n.object;
+
+        // SAVE IMAGE TO DOC.
+        NSString * filePath = [ALImagePickerHandler saveImageToDocDirectory:image];
+        [self processAttachment:filePath andMessageText:@"" andContentType:ALMESSAGE_CONTENT_ATTACHMENT];
+
+        [[NSNotificationCenter defaultCenter] removeObserver:dismissToken];
+        [[NSNotificationCenter defaultCenter] removeObserver:selectToken];
+    }];
+
+    dismissToken = [[NSNotificationCenter defaultCenter] addObserverForName:@"CT_JOT_DISMISS" object:nil queue:nil usingBlock:^(NSNotification * n){
+
+        [[NSNotificationCenter defaultCenter] removeObserver:dismissToken];
+        [[NSNotificationCenter defaultCenter] removeObserver:selectToken];
+    }];
+}
+
 
 -(void)deleteConversation{
 
