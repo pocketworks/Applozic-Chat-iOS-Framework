@@ -737,6 +737,10 @@
         default:
             break;
     }
+
+    contactCell.preservesSuperviewLayoutMargins = false;
+    contactCell.separatorInset = UIEdgeInsetsMake(0, 8, 0, 8);
+    contactCell.layoutMargins = UIEdgeInsetsMake(0, 8, 0, 8);
     
     return contactCell;
 }
