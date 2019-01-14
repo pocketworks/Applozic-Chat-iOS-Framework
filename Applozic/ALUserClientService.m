@@ -242,7 +242,9 @@
     
     NSMutableDictionary *channelDictionary = [NSMutableDictionary new];
     [channelDictionary setObject:contactIdsArray forKey:@"userNames"];
-    [channelDictionary setObject:channelKeysArray forKey:@"groupIds"];
+    if (channelKeysArray) {
+        [channelDictionary setObject:channelKeysArray forKey:@"groupIds"];
+    }
     [channelDictionary setObject:messageDictionary forKey:@"messageObject"];
     
     NSError *error;
