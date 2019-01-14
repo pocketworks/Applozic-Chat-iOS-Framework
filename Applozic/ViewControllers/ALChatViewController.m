@@ -86,7 +86,8 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
 @interface ALChatViewController ()<ALMediaBaseCellDelegate, NSURLConnectionDataDelegate, NSURLConnectionDelegate, ALLocationDelegate, ALAudioRecorderViewProtocol, ALAudioRecorderProtocol,
                                     ALMQTTConversationDelegate, ALAudioAttachmentDelegate, UIPickerViewDelegate, UIPickerViewDataSource,
                                     UIAlertViewDelegate, ALMUltipleAttachmentDelegate, UIDocumentInteractionControllerDelegate,
-                                    ABPeoplePickerNavigationControllerDelegate, ALSoundRecorderProtocol, ALCustomPickerDelegate,ALImageSendDelegate>
+                                    ABPeoplePickerNavigationControllerDelegate, ALSoundRecorderProtocol, ALCustomPickerDelegate, ALImageSendDelegate,
+                                    UIDocumentPickerDelegate>
 
 @property (nonatomic, assign) NSInteger startIndex;
 @property (nonatomic, assign) int rp;
@@ -2933,6 +2934,11 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
     [ALUtilityClass setAlertControllerFrame:theController andViewController:self];
 
     [theController addAction:[UIAlertAction actionWithTitle: NSLocalizedStringWithDefaultValue(@"cancelOptionText", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Cancel", @"") style:UIAlertActionStyleCancel handler:nil]];
+    
+    [theController addAction:[UIAlertAction actionWithTitle: NSLocalizedStringWithDefaultValue(@"addDocumentText", nil, [NSBundle mainBundle], @"Add Document", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self openDocuments];
+    }]];
+    
     if(![ALApplozicSettings isCameraOptionHidden]){
         [theController addAction:[UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"takePhotoText", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Take photo", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 
@@ -3066,9 +3072,55 @@ style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
     [self processAttachment:contactFilePath andMessageText:@"" andContentType:ALMESSAGE_CONTENT_VCARD];
 }
 
+#pragma mark - UIDocumentPickerDelegate
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
+{
+    if (urls.count > 0)
+    {
+        NSURL * url = urls[0];
+        NSString * filename = url.lastPathComponent;
+        
+        NSURL * dst = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
+        dst = [dst URLByAppendingPathComponent:filename];
+        
+        NSLog(@"Document Picker URL\nsrc: %@\ndst: %@", url.path, dst.path);
+        
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath: [dst path]];
+        
+        if (fileExists)
+        {
+            [[NSFileManager defaultManager] removeItemAtPath:[dst path] error:nil];
+        }
+        
+        NSError* error;
+        if ([[NSFileManager defaultManager] moveItemAtURL:url toURL:dst error:&error] == NO)
+        {
+            NSLog(@"Could not move item %@", [error localizedDescription]);
+            if ([error code] != NSFileWriteFileExistsError)
+            {
+                return;
+            }
+        }
+        
+        [self processAttachment:[dst path] andMessageText:@"" andContentType:ALMESSAGE_CONTENT_ATTACHMENT];
+    }
+}
+
 //==============================================================================================================================================
 #pragma mark - ATTACHMENT HANDLERS FOR IMAGE/CONTACT/AUDIO/VIDEO && A/V CALL
 //==============================================================================================================================================
+
+-(void)openDocuments
+{
+    UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"com.adobe.pdf", @"com.microsoft.word.doc", @"com.microsoft.word.xls", @"com.microsoft.powerpoint.​ppt"] inMode: UIDocumentPickerModeImport];
+    
+    if (pickerController != nil)
+    {
+        pickerController.delegate = self;
+        [self presentViewController:pickerController animated:YES completion:nil];
+    }
+}
 
 -(void)openCamera
 {

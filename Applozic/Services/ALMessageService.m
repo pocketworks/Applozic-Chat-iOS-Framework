@@ -639,7 +639,23 @@ withAttachmentAtLocation:(NSString *)attachmentLocalPath
     NSString * filePath = [docDirPath stringByAppendingPathComponent:timestamp];
     ALSLog(ALLoggerSeverityInfo, @"FILE_PATH : %@",filePath);
     NSMutableURLRequest * request = [ALRequestHandler createPOSTRequestWithUrlString:uploadURL paramString:nil];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+    
+    BOOL fileExists = YES;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath] == NO)
+    {
+        NSURL * dst = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
+        NSString * tmpFilePath = [[dst URLByAppendingPathComponent:message.imageFilePath] path];
+        NSLog(@"TEMP_FILE_PATH : %@",tmpFilePath);
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:tmpFilePath] == NO)
+        {
+            fileExists = NO;
+        } else {
+            filePath = tmpFilePath;
+        }
+    }
+    
+    if (fileExists) {
         //Create boundary, it can be anything
         NSString *boundary = @"------ApplogicBoundary4QuqLuM1cE5lMwCy";
         // set Content-Type in HTTP header
@@ -694,7 +710,7 @@ withAttachmentAtLocation:(NSString *)attachmentLocalPath
         ALSLog(ALLoggerSeverityInfo, @"CONNECTION_BEFORE_MQTT : %@",connection.mData);
     }
     else{
-        ALSLog(ALLoggerSeverityError, @"<<< ERROR >>> :: FILE DO NOT EXIT AT GIVEN PATH");
+        ALSLog(ALLoggerSeverityError, @"<<< ERROR >>> :: FILE DOES NOT EXIT AT GIVEN PATH");
     }
 
 }
