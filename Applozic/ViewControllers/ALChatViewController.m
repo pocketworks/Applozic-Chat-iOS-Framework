@@ -1128,20 +1128,68 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
     if([self isGroup])
     {
         [self setButtonTitle];
+
+
+        titleLabelButton.translatesAutoresizingMaskIntoConstraints = NO;
+
+        UIView* container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2200, 44)];
+        container.translatesAutoresizingMaskIntoConstraints = NO;
+
+        UIImageView* groupImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+        groupImage.contentMode = UIViewContentModeScaleAspectFit;
+        groupImage.translatesAutoresizingMaskIntoConstraints = NO;
+        UIImage * image = [UIImage imageNamed:@"applozic_group_icon" inBundle:[NSBundle bundleForClass:self.class] compatibleWithTraitCollection:nil];
+        if (image == nil) {
+            NSLog(@"Could not find image for title view!");
+        }
+        groupImage.image = image;
+
+        [container addSubview: groupImage];
+        [container addSubview:titleLabelButton];
+
+        if (@available(iOS 9.0, *)) {
+            [titleLabelButton sizeToFit];
+
+            [NSLayoutConstraint activateConstraints: @[
+                                                       [container.widthAnchor constraintLessThanOrEqualToConstant:220.0f],
+                                                       [container.heightAnchor constraintEqualToConstant:44.0f],
+
+                                                       [groupImage.widthAnchor constraintEqualToConstant:24.0f],
+                                                       [groupImage.heightAnchor constraintEqualToConstant:24.0f],
+
+                                                       [groupImage.trailingAnchor constraintEqualToAnchor:titleLabelButton.leadingAnchor constant:-8.0f],
+                                                       [groupImage.centerYAnchor constraintEqualToAnchor:container.centerYAnchor],
+
+                                                       [titleLabelButton.leadingAnchor constraintLessThanOrEqualToAnchor:container.leadingAnchor constant:32.0f],
+                                                       [titleLabelButton.trailingAnchor constraintLessThanOrEqualToAnchor:container.trailingAnchor],
+
+                                                       [titleLabelButton.centerXAnchor constraintEqualToAnchor:container.centerXAnchor],
+                                                       [titleLabelButton.centerYAnchor constraintEqualToAnchor:container.centerYAnchor],
+                                                       ]];
+
+            //            titleLabelButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+
+            self.navigationItem.titleView = container;
+        } else {
+            // Tough, we only support iOS 11 in our main app.
+
+            self.navigationItem.titleView = titleLabelButton;
+        }
+    } else {
+        self.navigationItem.titleView = titleLabelButton;
+
+        CGFloat COORDINATE_POINT_Y = titleLabelButton.frame.size.height - 17;
+        [self.label setFrame: CGRectMake(0, COORDINATE_POINT_Y ,self.navigationController.navigationBar.frame.size.width, 20)];
+
+
+        ALUserDetail *userDetail = [[ALUserDetail alloc] init];
+        userDetail.connected = self.alContact.connected;
+        userDetail.userId = self.alContact.userId;
+        userDetail.lastSeenAtTime = self.alContact.lastSeenAt;
+        userDetail.contactNumber = self.alContact.contactNumber;
+
+        [self updateLastSeenAtStatus:userDetail];
     }
-
-    self.navigationItem.titleView = titleLabelButton;
-
-    CGFloat COORDINATE_POINT_Y = titleLabelButton.frame.size.height - 17;
-    [self.label setFrame: CGRectMake(0, COORDINATE_POINT_Y ,self.navigationController.navigationBar.frame.size.width, 20)];
-
-    ALUserDetail *userDetail = [[ALUserDetail alloc] init];
-    userDetail.connected = self.alContact.connected;
-    userDetail.userId = self.alContact.userId;
-    userDetail.lastSeenAtTime = self.alContact.lastSeenAt;
-    userDetail.contactNumber = self.alContact.contactNumber;
-
-    [self updateLastSeenAtStatus:userDetail];
 }
 
 -(void)channelDeleted
