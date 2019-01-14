@@ -85,6 +85,8 @@ static CGFloat const sendTextViewCornerRadius = 15.0f;
     }
     
     [self parseRestrictedWordFile];
+
+    [self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil]];
 }
 
 -(void)parseRestrictedWordFile

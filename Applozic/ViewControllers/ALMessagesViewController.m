@@ -137,7 +137,7 @@
     [self.view addSubview:self.emptyConversationText];
     self.emptyConversationText.hidden = YES;
     
-    self.barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:[self setCustomBackButton: NSLocalizedStringWithDefaultValue(@"back", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], [ALApplozicSettings getTitleForBackButtonMsgVC], @"")]];
+    self.barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:[self setCustomBackButton: @""]];
     
     if((self.channelKey || self.userIdToLaunch)){
         [self createAndLaunchChatView ];
@@ -237,6 +237,8 @@
     }
 
     [self callLastSeenStatusUpdate];
+
+    [self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@" " style:UIBarButtonItemStylePlain target:nil action:nil]];
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle {
@@ -411,18 +413,21 @@
 
     bool forceTouchAvailable = NO;
 
-    if (@available(iOS 9.0, *)) {
-        if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)
-        {
-            forceTouchAvailable = YES;
+    // TODO: Disable tapping on a cell when force touching
+    // NOTE: Disabled until I can spend some time on the above ^^
 
-            // Force Touch...
-            BRSForceTouchRecognizer* tapGesture = [[BRSForceTouchRecognizer alloc] initWithTarget:self action:@selector(forcePressTable:)];
-            [tapGesture setDelegate:self];
-            //            [tapGesture requireGestureRecognizerToFail:self.mTableView.panGestureRecognizer];
-            [self.mTableView addGestureRecognizer:tapGesture];
-        }
-    }
+    //    if (@available(iOS 9.0, *)) {
+    //        if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)
+    //        {
+    //            forceTouchAvailable = YES;
+    //
+    //            // Force Touch...
+    //            BRSForceTouchRecognizer* tapGesture = [[BRSForceTouchRecognizer alloc] initWithTarget:self action:@selector(forcePressTable:)];
+    //            [tapGesture setDelegate:self];
+    //            [tapGesture requireGestureRecognizerToFail:self.mTableView.panGestureRecognizer];
+    //            [self.mTableView addGestureRecognizer:tapGesture];
+    //        }
+    //    }
 
     if (!forceTouchAvailable)
     {
@@ -449,13 +454,22 @@
 
 -(void)forcePressTable: (BRSForceTouchRecognizer*) gesture
 {
+    //    [self.mTableView touchesCancelled: [NSSet set] withEvent:nil];
+
     if (gesture.state == UIGestureRecognizerStateEnded)
     {
-        CGPoint point = [gesture locationInView:self.mTableView];
 
-        if ([self.mTableView pointInside:point withEvent:nil])
+        if (gesture.forceTouchAchieved)
         {
-            [self didLongPress:point];
+
+            CGPoint point = [gesture locationInView:self.mTableView];
+
+            NSLog(@"Force Press %f,%f", point.x, point.y);
+
+            if ([self.mTableView pointInside:point withEvent:nil])
+            {
+                [self didLongPress:point];
+            }
         }
     }
 }

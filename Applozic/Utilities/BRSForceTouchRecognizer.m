@@ -11,6 +11,7 @@
 @interface BRSForceTouchRecognizer () {
     CGFloat _force;
     CGFloat _maxForce;
+    Boolean _forceTouchAchieved;
 }
 @end
 
@@ -23,6 +24,7 @@
         [self setCancelsTouchesInView:NO];
         _force = 0.0f;
         _maxForce = 4.0f;
+        _forceTouchAchieved = NO;
     }
     return self;
 }
@@ -61,6 +63,11 @@
     if (@available(iOS 9.0, *)) {
         _maxForce = MIN(touch.maximumPossibleForce, _maxForce);
         _force = touch.force / _maxForce;
+
+        NSLog(@"Force - %f / %f", _force, _maxForce);
+        if (_force > 1.0f) {
+            _forceTouchAchieved = YES;
+        }
     }
 
     [self setState: state];
@@ -70,6 +77,7 @@
     [super reset];
 
     _force = 0.0f;
+    _forceTouchAchieved = NO;
 }
 
 

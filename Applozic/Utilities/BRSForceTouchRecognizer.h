@@ -11,4 +11,7 @@
 
 -(id)initWithTarget:(id)target action:(SEL)action;
 
+@property CGFloat force;
+@property Boolean forceTouchAchieved;
+
 @end

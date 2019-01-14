@@ -185,6 +185,9 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
 {
     [super viewDidLoad];
 
+    UINavigationController* nav = [self navigationController];
+    [nav.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@" " style:UIBarButtonItemStylePlain target:nil action:nil]];
+
     // Setup quick recording if it's enabled in the settings
     if([ALApplozicSettings isQuickAudioRecordingEnabled]) {
         if (@available(iOS 9.0, *) && [ALApplozicSettings isNewAudioDesignEnabled]) {
@@ -1788,6 +1791,15 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
         theCell.delegate = self;
         theCell.channel = self.alChannel;
         theCell.contact = self.alContact;
+        [theCell populateCell:theMessage viewSize:self.view.frame.size];
+        [self.view layoutIfNeeded];
+        return theCell;
+    }
+    else if ([theMessage.fileMeta.contentType length] > 0) // We may have messages with fileMeta but with the wrong Content Type
+    {
+        ALDocumentsCell *theCell = (ALDocumentsCell *)[tableView dequeueReusableCellWithIdentifier:@"DocumentsCell"];
+        theCell.tag = indexPath.row;
+        theCell.delegate = self;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         [self.view layoutIfNeeded];
         return theCell;
