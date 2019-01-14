@@ -61,9 +61,9 @@
 
 //VIEW
 #define DOWNLOAD_RETRY_PADDING_X 5
-#define DOWNLOAD_RETRY_PADDING_Y -2
+#define DOWNLOAD_RETRY_PADDING_Y 12
 #define DOWNLOAD_RETRY_PADDING_WIDTH 70
-#define DOWNLOAD_RETRY_PADDING_HEIGHT 70
+#define DOWNLOAD_RETRY_PADDING_HEIGHT 64
 //BUTTON
 #define DOWNLOAD_RETRY_BUTTON_PADDING_X 15
 #define DOWNLOAD_RETRY_BUTTON_PADDING_Y 0
@@ -222,7 +222,7 @@
                                                       DOWNLOAD_RETRY_BUTTON_PADDING_WIDTH, DOWNLOAD_RETRY_BUTTON_PADDING_HEIGHT)];
         
         [self.sizeLabel setFrame:CGRectMake(self.downloadRetryView.frame.origin.x,
-                                            self.mDowloadRetryButton.frame.origin.y + self.mDowloadRetryButton.frame.size.height,
+                                            self.mDowloadRetryButton.frame.origin.y + self.mDowloadRetryButton.frame.size.height - 3,
                                             self.downloadRetryView.frame.size.width, SIZE_HEIGHT)];
         
         [self.documentName setFrame:CGRectMake(self.downloadRetryView.frame.origin.x + self.downloadRetryView.frame.size.width
@@ -315,7 +315,7 @@
                                                       DOWNLOAD_RETRY_BUTTON_PADDING_WIDTH, DOWNLOAD_RETRY_BUTTON_PADDING_HEIGHT)];
         
         [self.sizeLabel setFrame:CGRectMake(self.downloadRetryView.frame.origin.x,
-                                            self.mDowloadRetryButton.frame.origin.y + self.mDowloadRetryButton.frame.size.height,
+                                            self.mDowloadRetryButton.frame.origin.y + self.mDowloadRetryButton.frame.size.height - 3,
                                             self.downloadRetryView.frame.size.width, SIZE_HEIGHT)];
         
         [self.documentName setFrame:CGRectMake(self.downloadRetryView.frame.origin.x + self.downloadRetryView.frame.size.width + 5,
