@@ -34,7 +34,7 @@
 #define DEFAULT_TOP_LANDSCAPE_CONSTANT -34
 #define DEFAULT_TOP_PORTRAIT_CONSTANT -64
 
-
+#define SEARCH_BAR_HEIGHT (52)
 
 @interface ALNewContactsViewController ()
 
@@ -88,7 +88,7 @@
     //    {
     
     float y = self.navigationController.navigationBar.frame.origin.y+self.navigationController.navigationBar.frame.size.height;
-    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,y, self.view.frame.size.width, 40)];
+    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,y, self.view.frame.size.width, SEARCH_BAR_HEIGHT)];
     self.searchBar.delegate = self;
     self.searchBar.placeholder =  NSLocalizedStringWithDefaultValue(@"searchInfo", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Email, userid, number" , @"") ;
     if ([UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
@@ -158,7 +158,7 @@
 -(void)viewWillLayoutSubviews
 {
     float y = self.navigationController.navigationBar.frame.origin.y+self.navigationController.navigationBar.frame.size.height;
-    self.searchBar.frame = CGRectMake(0,y, self.view.frame.size.width, 40);
+    self.searchBar.frame = CGRectMake(0,y, self.view.frame.size.width, SEARCH_BAR_HEIGHT);
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -217,7 +217,7 @@
     
     [self.navigationItem setLeftBarButtonItem: barButtonItem];
     float y = self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height;
-    self.searchBar.frame = CGRectMake(0,y, self.view.frame.size.width, 40);
+    self.searchBar.frame = CGRectMake(0,y, self.view.frame.size.width, SEARCH_BAR_HEIGHT);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUser:) name:@"USER_DETAIL_OTHER_VC" object:nil];
 }
