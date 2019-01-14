@@ -683,7 +683,7 @@
                 }
                 else
                 {
-                    memberCell.nameLabel.textColor = self.view.tintColor;
+                    memberCell.nameLabel.textColor = [ALApplozicSettings getPrimaryColour]; //self.view.tintColor;
                     memberCell.nameLabel.text = NSLocalizedStringWithDefaultValue(@"addNewMember", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Add New Member", @"");
                     
                 }
@@ -771,8 +771,7 @@
     memberCell.profileImageView.layer.cornerRadius =  memberCell.profileImageView.frame.size.width/2;
     memberCell.alphabeticLabel.textColor = [UIColor whiteColor];
     [memberCell.adminLabel setText:NSLocalizedStringWithDefaultValue(@"adminText", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Admin", @"")];
-    memberCell.adminLabel.textColor = [UIColor blackColor];
-
+    memberCell.adminLabel.textColor = [ALApplozicSettings getPrimaryColour];
 }
 
 #pragma mark Row Height

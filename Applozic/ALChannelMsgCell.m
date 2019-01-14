@@ -46,7 +46,7 @@
     [self.mMessageLabel setTextAlignment:NSTextAlignmentCenter];
     [self.mMessageLabel setText:alMessage.message];
     [self.mMessageLabel setBackgroundColor:[UIColor clearColor]];
-    [self.mMessageLabel setTextColor:[UIColor blackColor]];
+    [self.mMessageLabel setTextColor:[UIColor whiteColor]];
 
     [self.mDateLabel setHidden:YES];
     self.mUserProfileImageView.alpha = 0;
@@ -67,7 +67,7 @@
     CGRect frame = CGRectMake(theTextPoint.x, theTextPoint.y,
                               bubbleWidth, theTextSize.height + (2 * padding));
     
-    self.mBubleImageView.backgroundColor = [UIColor lightGrayColor];
+    self.mBubleImageView.backgroundColor = [UIColor colorWithRed:60.0f/255.0 green:16.0f/255.0f blue:83.0f/255.0f alpha:1.0f];
     [self.mBubleImageView setFrame:frame];
     [self.mBubleImageView setHidden:NO];
     

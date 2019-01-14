@@ -34,7 +34,7 @@
 #define DEFAULT_TOP_LANDSCAPE_CONSTANT -34
 #define DEFAULT_TOP_PORTRAIT_CONSTANT -64
 
-
+#define SEARCH_BAR_HEIGHT (52)
 
 @interface ALNewContactsViewController ()
 
@@ -88,7 +88,7 @@
     //    {
     
     float y = self.navigationController.navigationBar.frame.origin.y+self.navigationController.navigationBar.frame.size.height;
-    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,y, self.view.frame.size.width, 40)];
+    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,y, self.view.frame.size.width, SEARCH_BAR_HEIGHT)];
     self.searchBar.delegate = self;
     self.searchBar.placeholder =  NSLocalizedStringWithDefaultValue(@"searchInfo", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Email, userid, number" , @"") ;
     if ([UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
@@ -123,8 +123,7 @@
         [self.searchBar setUserInteractionEnabled:YES];
     }
 
-    
-    barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:[self setCustomBackButton: NSLocalizedStringWithDefaultValue(@"back", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Back" , @"")]];
+    barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:[self setCustomBackButton: @""]];
     
     self.colors = [[NSArray alloc] initWithObjects:@"#617D8A",@"#628B70",@"#8C8863",@"8B627D",@"8B6F62", nil];
     
@@ -159,7 +158,7 @@
 -(void)viewWillLayoutSubviews
 {
     float y = self.navigationController.navigationBar.frame.origin.y+self.navigationController.navigationBar.frame.size.height;
-    self.searchBar.frame = CGRectMake(0,y, self.view.frame.size.width, 40);
+    self.searchBar.frame = CGRectMake(0,y, self.view.frame.size.width, SEARCH_BAR_HEIGHT);
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -218,7 +217,7 @@
     
     [self.navigationItem setLeftBarButtonItem: barButtonItem];
     float y = self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height;
-    self.searchBar.frame = CGRectMake(0,y, self.view.frame.size.width, 40);
+    self.searchBar.frame = CGRectMake(0,y, self.view.frame.size.width, SEARCH_BAR_HEIGHT);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUser:) name:@"USER_DETAIL_OTHER_VC" object:nil];
 }
@@ -434,7 +433,12 @@
     [newContactCell.contactPersonImageView sd_setImageWithURL:[NSURL URLWithString:@""] placeholderImage:nil options:SDWebImageRefreshCached];
     newContactCell.contactPersonName.text = @"";
     [newContactCell.contactPersonImageView setHidden:NO];
-    
+
+    UIColor* selection = [UIColor colorWithRed:227.0f/255.0f green:224.0f/255.0f blue:235.0f/255.0f alpha:1];
+    UIView* selectedBackground = [[UIView alloc] init];
+    [selectedBackground setBackgroundColor:selection];
+    [newContactCell setMultipleSelectionBackgroundView:selectedBackground];
+
     dispatch_async(dispatch_get_main_queue(), ^{
         newContactCell.contactPersonImageView.layer.cornerRadius = newContactCell.contactPersonImageView.frame.size.width/2;
         newContactCell.contactPersonImageView.layer.masksToBounds = YES;

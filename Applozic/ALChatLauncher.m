@@ -142,7 +142,7 @@
                                    
                                                             bundle:[NSBundle bundleForClass:ALChatViewController.class]];
        
-       ALChatViewController *chatView = (ALChatViewController *) [storyboard instantiateViewControllerWithIdentifier:@"ALChatViewController"];
+           ALChatViewController *chatView = (ALChatViewController *) [storyboard instantiateViewControllerWithIdentifier:@"ALChatViewController"];
        
        chatView.channelKey = groupID;
        chatView.text = text;
@@ -158,7 +158,6 @@
    }];
 }
 
-
 -(void)launchChatList:(NSString *)title andViewControllerObject:(UIViewController *)viewController
 {
     
@@ -171,6 +170,9 @@
     UITabBarController * tabBAR = ((UITabBarController *)theTabBar);
     [self setCustomTabBarIcon:tabBAR];
     UINavigationController * navBAR = (UINavigationController *)[[tabBAR viewControllers] objectAtIndex:0];
+
+    [navBAR.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil]];
+
     ALMessagesViewController * msgVC = (ALMessagesViewController *)[[navBAR viewControllers] objectAtIndex:0];
     msgVC.messagesViewDelegate = self;
     [viewController presentViewController:theTabBar animated:YES completion:nil];
@@ -299,6 +301,8 @@
     [tabBAR.tabBar setTintColor:UIColor.whiteColor];
     [tabBAR.tabBar setBackgroundColor:[ALApplozicSettings getColorForNavigation]];
     [tabBAR.tabBar setBarTintColor:[ALApplozicSettings getColorForNavigation]];
+
+    [tabBAR.tabBar setHidden:YES];
 }
 
 //============================================

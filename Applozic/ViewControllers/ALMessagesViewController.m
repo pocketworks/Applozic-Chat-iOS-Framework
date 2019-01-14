@@ -45,6 +45,7 @@
 #import "ALGroupCreationViewController.h"
 #import "ALMessageClientService.h"
 #import "ALLogger.h"
+#import "BRSForceTouchRecognizer.h"
 
 // Constants
 #define DEFAULT_TOP_LANDSCAPE_CONSTANT -34
@@ -55,7 +56,7 @@
 // Private interface
 //==============================================================================================================================================
 
-@interface ALMessagesViewController ()<UITableViewDataSource, UITableViewDelegate, ALMessagesDelegate, ALMQTTConversationDelegate>
+@interface ALMessagesViewController ()<UITableViewDataSource, UITableViewDelegate, ALMessagesDelegate, ALMQTTConversationDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *navigationRightButton;
 
@@ -82,6 +83,8 @@
 @property (strong, nonatomic) UIBarButtonItem *refreshButton;
 
 @property (nonatomic, strong) ALMessageDBService *dBService;
+
+@property (nonatomic, strong) NSIndexPath* lastLongPressIndexPath;
 
 @end
 
@@ -119,6 +122,8 @@
 
     self.alMqttConversationService = [ALMQTTConversationService sharedInstance];
     self.alMqttConversationService.mqttConversationDelegate = self;
+
+    self.lastLongPressIndexPath = nil;
     
     CGFloat navigationHeight = self.navigationController.navigationBar.frame.size.height +
     [UIApplication sharedApplication].statusBarFrame.size.height;
@@ -132,7 +137,7 @@
     [self.view addSubview:self.emptyConversationText];
     self.emptyConversationText.hidden = YES;
     
-    self.barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:[self setCustomBackButton: NSLocalizedStringWithDefaultValue(@"back", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], [ALApplozicSettings getTitleForBackButtonMsgVC], @"")]];
+    self.barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:[self setCustomBackButton: @""]];
     
     if((self.channelKey || self.userIdToLaunch)){
         [self createAndLaunchChatView ];
@@ -232,6 +237,8 @@
     }
 
     [self callLastSeenStatusUpdate];
+
+    [self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@" " style:UIBarButtonItemStylePlain target:nil action:nil]];
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle {
@@ -403,6 +410,117 @@
                                              selector:@selector(updateConversationTableNotification:)
                                                  name:@"updateConversationTableNotification"
                                                object:nil];
+
+    bool forceTouchAvailable = NO;
+
+    // TODO: Disable tapping on a cell when force touching
+    // NOTE: Disabled until I can spend some time on the above ^^
+
+    //    if (@available(iOS 9.0, *)) {
+    //        if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)
+    //        {
+    //            forceTouchAvailable = YES;
+    //
+    //            // Force Touch...
+    //            BRSForceTouchRecognizer* tapGesture = [[BRSForceTouchRecognizer alloc] initWithTarget:self action:@selector(forcePressTable:)];
+    //            [tapGesture setDelegate:self];
+    //            [tapGesture requireGestureRecognizerToFail:self.mTableView.panGestureRecognizer];
+    //            [self.mTableView addGestureRecognizer:tapGesture];
+    //        }
+    //    }
+
+    if (!forceTouchAvailable)
+    {
+        // if no 3D Touch is available use long press
+        UILongPressGestureRecognizer * longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressTable:)];
+        [longPressGesture setDelegate:self];
+        [longPressGesture requireGestureRecognizerToFail:self.mTableView.panGestureRecognizer];
+        [self.mTableView addGestureRecognizer:longPressGesture];
+    }
+}
+
+-(void)longPressTable: (UILongPressGestureRecognizer*) gesture
+{
+    if (gesture.state == UIGestureRecognizerStateEnded)
+    {
+        CGPoint point = [gesture locationInView:self.mTableView];
+
+        if ([self.mTableView pointInside:point withEvent:nil])
+        {
+            [self didLongPress:point];
+        }
+    }
+}
+
+-(void)forcePressTable: (BRSForceTouchRecognizer*) gesture
+{
+    //    [self.mTableView touchesCancelled: [NSSet set] withEvent:nil];
+
+    if (gesture.state == UIGestureRecognizerStateEnded)
+    {
+
+        if (gesture.forceTouchAchieved)
+        {
+
+            CGPoint point = [gesture locationInView:self.mTableView];
+
+            NSLog(@"Force Press %f,%f", point.x, point.y);
+
+            if ([self.mTableView pointInside:point withEvent:nil])
+            {
+                [self didLongPress:point];
+            }
+        }
+    }
+}
+
+-(void)didLongPress:(CGPoint) point {
+    NSIndexPath* indexPath = [self.mTableView indexPathForRowAtPoint:point];
+    UITableViewCell* cell = [self.mTableView cellForRowAtIndexPath:indexPath];
+
+    // Tapped in an empty area of the table view
+    if (indexPath == nil || cell == nil)
+    {
+        return;
+    }
+
+    if ([indexPath section] != 1)
+    {
+        return;
+    }
+
+    [self becomeFirstResponder];
+
+    UIMenuController* menu = [UIMenuController sharedMenuController];
+
+    UIMenuItem* menuItem = [[UIMenuItem alloc] initWithTitle:@"Delete" action:@selector(longPressTableMenu:)];
+    [menu setMenuItems:@[menuItem]];
+    [menu setTargetRect:cell.frame inView:self.mTableView];
+    [menu setArrowDirection: UIMenuControllerArrowDefault];
+    [menu setMenuVisible:YES animated:YES];
+
+    self.lastLongPressIndexPath = indexPath;
+}
+
+-(BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+-(BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    if (action == @selector(longPressTableMenu:))
+        return YES;
+
+    return NO;
+}
+
+-(void)longPressTableMenu: (UIMenuItem*) sender
+{
+    if (self.lastLongPressIndexPath != nil) {
+        [self deleteConversation:self.lastLongPressIndexPath];
+        self.lastLongPressIndexPath = nil;
+    }
 }
 
 //==============================================================================================================================================
@@ -1032,58 +1150,64 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        
-        ALSLog(ALLoggerSeverityInfo, @"DELETE_PRESSED");
-        if(![ALDataNetworkConnection checkDataNetworkAvailable])
-        {
-            [self noDataNotificationView];
-            return;
-        }
-        ALMessage * alMessageobj = self.mContactsMessageListArray[indexPath.row];
-        
-        ALChannelService *channelService = [ALChannelService new];
-        
-        if([channelService isChannelLeft:[alMessageobj getGroupId]])
-        {
-            NSArray * filteredArray = [self.mContactsMessageListArray filteredArrayUsingPredicate:
-                                       [NSPredicate predicateWithFormat:@"groupId = %@",[alMessageobj getGroupId]]];
-            
-            [self.dBService deleteAllMessagesByContact:nil orChannelKey:[alMessageobj getGroupId]];
-            [ALChannelService setUnreadCountZeroForGroupID:[alMessageobj getGroupId]];
-        }
-        
-        [ALMessageService deleteMessageThread:alMessageobj.contactIds orChannelKey:[alMessageobj getGroupId]
-                               withCompletion:^(NSString *string, NSError *error) {
-            
-            if(error)
-            {
-                ALSLog(ALLoggerSeverityError, @"DELETE_FAILED_CONVERSATION_ERROR_DESCRIPTION :: %@", error.description);
-                [ALUtilityClass displayToastWithMessage:@"Delete failed"];
-                return;
-            }
-            NSArray * theFilteredArray;
-            if([alMessageobj getGroupId])
-            {
-
-                theFilteredArray = [self.mContactsMessageListArray filteredArrayUsingPredicate:
-                                    [NSPredicate predicateWithFormat:@"groupId = %@",[alMessageobj getGroupId]]];
-            }
-            else
-            {
-                theFilteredArray = [self.mContactsMessageListArray filteredArrayUsingPredicate:
-                                    [NSPredicate predicateWithFormat:@"contactIds = %@ AND groupId = %@",alMessageobj.contactIds,nil]];
-            }
-            
-            [self subProcessDeleteMessageThread:theFilteredArray];
-                                   
-            if([ALChannelService isChannelDeleted:[alMessageobj getGroupId]])
-            {
-                ALChannelDBService *channelDBService = [[ALChannelDBService alloc] init];
-                [channelDBService deleteChannel:[alMessageobj getGroupId]];
-            }
-        }];
+        [self deleteConversation: indexPath];
     }
 }
+
+-(void)deleteConversation: (NSIndexPath*) indexPath {
+    NSLog(@"DELETE_PRESSED");
+    if(![ALDataNetworkConnection checkDataNetworkAvailable])
+    {
+        [self noDataNotificationView];
+        return;
+    }
+    ALMessage * alMessageobj = self.mContactsMessageListArray[indexPath.row];
+
+    ALChannelService *channelService = [ALChannelService new];
+
+    if([channelService isChannelLeft:[alMessageobj getGroupId]])
+    {
+        NSArray * filteredArray = [self.mContactsMessageListArray filteredArrayUsingPredicate:
+                                   [NSPredicate predicateWithFormat:@"groupId = %@",[alMessageobj getGroupId]]];
+
+        [self.dBService deleteAllMessagesByContact:nil orChannelKey:[alMessageobj getGroupId]];
+        [ALChannelService setUnreadCountZeroForGroupID:[alMessageobj getGroupId]];
+        [self subProcessDeleteMessageThread:filteredArray];
+        return;
+    }
+
+    [ALMessageService deleteMessageThread:alMessageobj.contactIds orChannelKey:[alMessageobj getGroupId]
+                           withCompletion:^(NSString *string, NSError *error) {
+
+                               if(error)
+                               {
+                                   NSLog(@"DELETE_FAILED_CONVERSATION_ERROR_DESCRIPTION :: %@", error.description);
+                                   [ALUtilityClass displayToastWithMessage:@"Delete failed"];
+                                   return;
+                               }
+                               NSArray * theFilteredArray;
+                               if([alMessageobj getGroupId])
+                               {
+
+                                   theFilteredArray = [self.mContactsMessageListArray filteredArrayUsingPredicate:
+                                                       [NSPredicate predicateWithFormat:@"groupId = %@",[alMessageobj getGroupId]]];
+                               }
+                               else
+                               {
+                                   theFilteredArray = [self.mContactsMessageListArray filteredArrayUsingPredicate:
+                                                       [NSPredicate predicateWithFormat:@"contactIds = %@",alMessageobj.contactIds]];
+                               }
+
+                               [self subProcessDeleteMessageThread:theFilteredArray];
+
+                               if([ALChannelService isChannelDeleted:[alMessageobj getGroupId]])
+                               {
+                                   ALChannelDBService *channelDBService = [[ALChannelDBService alloc] init];
+                                   [channelDBService deleteChannel:[alMessageobj getGroupId]];
+                               }
+                           }];
+}
+
 
 -(void)subProcessDeleteMessageThread:(NSArray *)theFilteredArray
 {
