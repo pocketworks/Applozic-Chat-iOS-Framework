@@ -7,7 +7,7 @@
 //
 
 #import "ALNavigationController.h"
-
+#import "ALApplozicSettings.h"
 
 
 @implementation ALNavigationController
@@ -30,4 +30,7 @@
     return nil;
 }
 
+-(UIStatusBarStyle) preferredStatusBarStyle {
+    return [ALApplozicSettings getStatusBarStyle];
+}
 @end

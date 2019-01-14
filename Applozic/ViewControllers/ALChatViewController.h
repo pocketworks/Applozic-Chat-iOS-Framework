@@ -27,6 +27,10 @@ extern NSString * const ThirdPartyDetailVCNotificationNavigationVC;
 extern NSString * const ThirdPartyDetailVCNotificationALContact;
 extern NSString * const ThirdPartyDetailVCNotificationChannelKey;
 
+@protocol CustomGalleryProtocol
+-(void) presentWithViewController: (UIViewController*) viewController completionHandler:(void(^)(NSArray* links)) handler;
+@end
+
 @protocol ALChatViewControllerDelegate <NSObject>
 
 @optional

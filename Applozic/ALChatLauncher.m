@@ -295,6 +295,10 @@
     UITabBarItem *item2 = [tabBAR.tabBar.items objectAtIndex:1];
     [item2 setTitle:[ALApplozicSettings getProfileTabTitle]];
     [item2 setImage:[ALApplozicSettings getProfileTabIcon]];
+    
+    [tabBAR.tabBar setTintColor:UIColor.whiteColor];
+    [tabBAR.tabBar setBackgroundColor:[ALApplozicSettings getColorForNavigation]];
+    [tabBAR.tabBar setBarTintColor:[ALApplozicSettings getColorForNavigation]];
 }
 
 //============================================

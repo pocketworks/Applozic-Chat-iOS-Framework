@@ -267,6 +267,10 @@ static CGFloat const sendTextViewCornerRadius = 15.0f;
     paddingForTextMessageViewHeight  = 2;
 }
 
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return [ALApplozicSettings getStatusBarStyle];
+}
+
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];

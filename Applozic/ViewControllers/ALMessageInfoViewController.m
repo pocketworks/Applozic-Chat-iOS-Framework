@@ -61,6 +61,10 @@
     }
 }
 
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return [ALApplozicSettings getStatusBarStyle];
+}
+
 //==================================================================================================
 # pragma TABLE VIEW DELEGATES
 //==================================================================================================

@@ -17,6 +17,42 @@
 
 @implementation ALApplozicSettings
 
++(void)setPrimaryTextColour:(UIColor *)colour
+{
+    NSData *receiveColorData = [NSKeyedArchiver archivedDataWithRootObject:colour];
+    [[NSUserDefaults standardUserDefaults] setObject:receiveColorData forKey:PRIMARY_TEXT_COLOUR];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++(UIColor *)getPrimaryTextColour
+{
+    NSData *sendColorData = [[NSUserDefaults standardUserDefaults] objectForKey:PRIMARY_TEXT_COLOUR];
+    UIColor *sendColor = [NSKeyedUnarchiver unarchiveObjectWithData:sendColorData];
+    if(sendColor)
+    {
+        return sendColor;
+    }
+    return [UIColor whiteColor];
+}
+
++(void)setPrimaryColour:(UIColor *)colour
+{
+    NSData *receiveColorData = [NSKeyedArchiver archivedDataWithRootObject:colour];
+    [[NSUserDefaults standardUserDefaults] setObject:receiveColorData forKey:PRIMARY_COLOUR];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++(UIColor *)getPrimaryColour
+{
+    NSData *sendColorData = [[NSUserDefaults standardUserDefaults] objectForKey:PRIMARY_COLOUR];
+    UIColor *sendColor = [NSKeyedUnarchiver unarchiveObjectWithData:sendColorData];
+    if(sendColor)
+    {
+        return sendColor;
+    }
+    return [UIColor whiteColor];
+}
+
 +(void)setFontFace:(NSString *)fontFace
 {
     [[NSUserDefaults standardUserDefaults] setValue:fontFace forKey:FONT_FACE];

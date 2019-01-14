@@ -1134,7 +1134,7 @@
         <!--Navigation Controller-->
         <scene sceneID="44I-5Y-y8P">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="nR9-3H-cTW" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="nR9-3H-cTW" customClass="ALNavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" id="70j-Xw-YMX"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="aLk-X7-wot">
@@ -1153,7 +1153,7 @@
         <!--Navigation Controller-->
         <scene sceneID="oUw-eN-7TI">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MNB-7r-ca3" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MNB-7r-ca3" customClass="ALNavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="contacts" id="rAD-Rw-MBT"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="GCi-77-i4P">
@@ -1586,7 +1586,7 @@ Upload Image Button.centerX = scd_profile_BG.centerX + 50</string>
         <!--Navigation Controller-->
         <scene sceneID="sr7-pi-5eS">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cae-ki-ei4" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cae-ki-ei4" customClass="ALNavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" id="fx6-zu-YmW"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Apy-Bi-oR6">

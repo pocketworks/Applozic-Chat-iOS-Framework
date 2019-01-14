@@ -206,10 +206,15 @@
         [messageClientService downloadImageUrlAndSet:_alContact.contactImageUrl imageView:_profileImageView defaultImage:nil];
     }
     
+    [self.userStatus setTextColor: [ALApplozicSettings getPrimaryTextColour]];
+    [self.emailId setTextColor: [ALApplozicSettings getPrimaryTextColour]];
+    [self.phoneNo setTextColor: [ALApplozicSettings getPrimaryTextColour]];
+    
     [self.callButton setEnabled:NO];
     if(self.alContact.contactNumber)
     {
         [self.callButton setEnabled:YES];
+        [self.callButton setTintColor:[ALApplozicSettings getColorForNavigation]];
     }
     
     if([ALApplozicSettings getColorForNavigation] && [ALApplozicSettings getColorForNavigationItem])
@@ -218,6 +223,10 @@
         [self.navigationController.navigationBar setTintColor:[ALApplozicSettings getColorForNavigationItem]];
         [self.navigationController.navigationBar addSubview:[ALUtilityClass setStatusBarStyle]];
     }
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return [ALApplozicSettings getStatusBarStyle];
 }
 
 -(NSString *)getLastSeenString:(NSNumber *)lastSeen

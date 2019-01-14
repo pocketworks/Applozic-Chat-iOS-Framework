@@ -87,6 +87,10 @@ static NSString * const reuseIdentifier = @"collectionCell";
     }
 }
 
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return [ALApplozicSettings getStatusBarStyle];
+}
+
 -(void)cancelButtonAction
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -209,7 +213,7 @@ static NSString * const reuseIdentifier = @"collectionCell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     AlMultipleAttachmentCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    [self setColorBorder:cell andColor:[UIColor lightGrayColor]];
+    [self setColorBorder:cell andColor:[ALApplozicSettings getPrimaryColour]];
 
     [cell.imageView setBackgroundColor: [UIColor clearColor]];
 
@@ -316,7 +320,7 @@ static NSString * const reuseIdentifier = @"collectionCell";
 {
     cell.layer.masksToBounds = YES;
     cell.layer.borderColor = [color CGColor];
-    cell.layer.borderWidth = 2.0f;
+    cell.layer.borderWidth = 1.0f;
 }
 
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
@@ -329,7 +333,7 @@ static NSString * const reuseIdentifier = @"collectionCell";
 
         headerView.msgTextField.delegate = self;
         headerView.msgTextField.layer.masksToBounds = YES;
-        headerView.msgTextField.layer.borderColor = [[UIColor brownColor] CGColor];
+        headerView.msgTextField.layer.borderColor = [[ALApplozicSettings getPrimaryColour] CGColor];
         headerView.msgTextField.layer.borderWidth = 1.0f;
         headerView.msgTextField.placeholder =  NSLocalizedStringWithDefaultValue(@"writeSomeTextHere", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Write Some Text..." , @"");
 
