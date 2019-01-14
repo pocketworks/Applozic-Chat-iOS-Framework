@@ -433,7 +433,12 @@
     [newContactCell.contactPersonImageView sd_setImageWithURL:[NSURL URLWithString:@""] placeholderImage:nil options:SDWebImageRefreshCached];
     newContactCell.contactPersonName.text = @"";
     [newContactCell.contactPersonImageView setHidden:NO];
-    
+
+    UIColor* selection = [UIColor colorWithRed:227.0f/255.0f green:224.0f/255.0f blue:235.0f/255.0f alpha:1];
+    UIView* selectedBackground = [[UIView alloc] init];
+    [selectedBackground setBackgroundColor:selection];
+    [newContactCell setMultipleSelectionBackgroundView:selectedBackground];
+
     dispatch_async(dispatch_get_main_queue(), ^{
         newContactCell.contactPersonImageView.layer.cornerRadius = newContactCell.contactPersonImageView.frame.size.width/2;
         newContactCell.contactPersonImageView.layer.masksToBounds = YES;
