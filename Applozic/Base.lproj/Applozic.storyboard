@@ -1759,7 +1759,10 @@ Upload Image Button.centerX = scd_profile_BG.centerX + 50</string>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="oOD-ac-EA7"/>
                                         </constraints>
-                                        <state key="normal" image="attachments"/>
+                                        <color key="tintColor" red="0.23529411759999999" green="0.062745098040000002" blue="0.32549019610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
++                                       <state key="normal" image="Plus_PNG">
++                                           <color key="titleColor" red="0.23529411759999999" green="0.062745098040000002" blue="0.32549019610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
++                                       </state>
                                         <connections>
                                             <action selector="attachmentActionMethod:" destination="rWz-Vg-7Ha" eventType="touchDown" id="4Ag-VV-0c2"/>
                                         </connections>
@@ -1940,11 +1943,11 @@ Upload Image Button.centerX = scd_profile_BG.centerX + 50</string>
     <resources>
         <image name="DELETEIOSX" width="50" height="50"/>
         <image name="Path" width="360" height="186"/>
+        <image name="Plus_PNG" width="100" height="100"/>
         <image name="SendButton20" width="20" height="20"/>
         <image name="applozic_edit" width="18" height="18"/>
         <image name="applozic_group_icon" width="100" height="100"/>
         <image name="applozic_uploadCamera" width="20" height="16"/>
-        <image name="attachments" width="56" height="26"/>
         <image name="audio_mic" width="462" height="726"/>
         <image name="ic_action_camera" width="64" height="64"/>
         <image name="ic_phone_gray" width="30" height="32"/>
