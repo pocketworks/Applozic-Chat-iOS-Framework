@@ -311,7 +311,7 @@
 
             {
                 UIAlertView *myAlert = [[UIAlertView alloc]
-                                        initWithTitle:@"Error"
+                                        initWithTitle:@"getListOfRegisteredUsersWithCompletion"
                                         message:error.description
                                         delegate:self
                                         cancelButtonTitle:@"Ok"
