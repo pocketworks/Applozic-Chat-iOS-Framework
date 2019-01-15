@@ -3047,9 +3047,9 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
 
     [theController addAction:[UIAlertAction actionWithTitle: NSLocalizedStringWithDefaultValue(@"cancelOptionText", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Cancel", @"") style:UIAlertActionStyleCancel handler:nil]];
     
-    [theController addAction:[UIAlertAction actionWithTitle: NSLocalizedStringWithDefaultValue(@"addDocumentText", nil, [NSBundle mainBundle], @"Add Document", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self openDocuments];
-    }]];
+//    [theController addAction:[UIAlertAction actionWithTitle: NSLocalizedStringWithDefaultValue(@"addDocumentText", nil, [NSBundle mainBundle], @"Add Document", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//        [self openDocuments];
+//    }]];
     
     [theController addAction:[UIAlertAction actionWithTitle: NSLocalizedStringWithDefaultValue(@"openAppGallery", nil, [NSBundle mainBundle], @"App Gallery", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self openAppGallery];
