@@ -6,7 +6,7 @@
 //  Copyright © 2015 applozic Inc. All rights reserved.
 //
 
-#define CONTACT_PAGE_SIZE 100
+#define CONTACT_PAGE_SIZE 0 //100
 
 #import "ALUserService.h"
 #import "ALRequestHandler.h"
