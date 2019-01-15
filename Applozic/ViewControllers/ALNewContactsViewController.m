@@ -1447,6 +1447,17 @@
         [self.searchBar setUserInteractionEnabled:YES];
         if(error)
         {
+            {
+                UIAlertView *myAlert = [[UIAlertView alloc]
+                                        initWithTitle:@"Error"
+                                        message:error.description
+                                        delegate:self
+                                        cancelButtonTitle:@"Ok"
+                                        otherButtonTitles:nil];
+                [myAlert show];
+
+            }
+            
             [self.activityIndicator stopAnimating];
             [self.emptyConversationText setHidden:NO];
             [self.emptyConversationText setText: NSLocalizedStringWithDefaultValue(@"unableToFetachContacts", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Unable to fetch contacts" , @"")];

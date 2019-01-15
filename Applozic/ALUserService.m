@@ -308,6 +308,17 @@
 
         if(error)
         {
+
+            {
+                UIAlertView *myAlert = [[UIAlertView alloc]
+                                        initWithTitle:@"Error"
+                                        message:error.description
+                                        delegate:self
+                                        cancelButtonTitle:@"Ok"
+                                        otherButtonTitles:nil];
+                [myAlert show];
+            }
+
             completion(error);
             return;
         }
