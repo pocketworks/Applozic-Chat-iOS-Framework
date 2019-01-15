@@ -92,13 +92,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_action_camera" translatesAutoresizingMaskIntoConstraints="NO" id="ng6-Us-xRU">
-                                                    <rect key="frame" x="97" y="41" width="27" height="19"/>
+                                                    <rect key="frame" x="97" y="41" width="19" height="19"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="27" id="K9t-DK-prk"/>
+                                                        <constraint firstAttribute="width" constant="19" id="K9t-DK-prk"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Image Label " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nFm-Yv-yQF">
-                                                    <rect key="frame" x="129" y="43" width="118" height="17"/>
+                                                    <rect key="frame" x="121" y="43" width="118" height="17"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="118" id="MT4-6C-INF"/>
                                                     </constraints>
