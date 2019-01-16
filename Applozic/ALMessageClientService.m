@@ -27,6 +27,7 @@
 #import "ALConnection.h"
 #import "ALConnectionQueueHandler.h"
 #import "ALApplozicSettings.h"
+#import "BRSImagesDownloader.h"
 
 @implementation ALMessageClientService
 
@@ -170,6 +171,11 @@
     
     NSURL * theUrl1 = [NSURL URLWithString:blobKey];
     [imageView sd_setImageWithURL:theUrl1 placeholderImage:[ALUtilityClass getImageFromFramworkBundle:defaultImage] options:SDWebImageRefreshCached];
+}
+
+-(void) downloadFromAWSImageUrlAndSet: (NSString *) blobKey imageView:(UIImageView *) imageView defaultImage:(NSString *) defaultImage {
+    NSURL * theUrl1 = [NSURL URLWithString:blobKey];
+    [BRSImagesDownloader updateImageView:imageView with:theUrl1 placeholderImage:[ALUtilityClass getImageFromFramworkBundle:defaultImage]];
 }
 
 -(void) addWelcomeMessage:(NSNumber *)channelKey

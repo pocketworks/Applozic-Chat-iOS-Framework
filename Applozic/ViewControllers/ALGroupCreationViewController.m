@@ -30,6 +30,7 @@
 #import "UIImageView+WebCache.h"
 #import "ALContactService.h"
 #import "ALVOIPNotificationHandler.h"
+#import "BRSImagesDownloader.h"
 
 @interface ALGroupCreationViewController ()
 
@@ -96,7 +97,6 @@
     self.descriptionTextView.hidden = NO;
     self.descriptionTextView.userInteractionEnabled = NO;
     [self.tabBarController.tabBar setHidden:YES];
-    // self.alNewContactViewController.delegateGroupCreation = self;
 }
 
 -(void)setProfileImage
@@ -104,7 +104,7 @@
     NSURL *imageURL = [NSURL URLWithString:self.groupImageURL];
     if(imageURL.path.length)
     {
-        [self.groupIconView sd_setImageWithURL:imageURL placeholderImage:nil options:SDWebImageRefreshCached];
+        [BRSImagesDownloader updateImageView:self.groupIconView with:imageURL placeholderImage:nil];
     }
     else
     {

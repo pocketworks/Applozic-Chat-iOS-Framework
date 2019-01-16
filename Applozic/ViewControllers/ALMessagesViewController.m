@@ -920,7 +920,7 @@
             }
 
             ALMessageClientService * messageClientService = [[ALMessageClientService alloc]init];
-            [messageClientService downloadImageUrlAndSet:alChannel.channelImageURL imageView:contactCell.mUserImageView defaultImage:placeHolderImage];
+            [messageClientService downloadFromAWSImageUrlAndSet:alChannel.channelImageURL imageView:contactCell.mUserImageView defaultImage:placeHolderImage];
             
             nameIcon.hidden = YES;
             contactCell.mUserNameLabel.text = [alChannel name];

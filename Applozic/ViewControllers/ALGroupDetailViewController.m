@@ -810,7 +810,7 @@
                                   [ALUtilityClass getImageFromFramworkBundle:@"applozic_group_icon.png"]];
         
         ALMessageClientService * messageClientService = [[ALMessageClientService alloc]init];
-        [messageClientService downloadImageUrlAndSet:self.alChannel.channelImageURL imageView:imageView defaultImage:nil];
+        [messageClientService downloadFromAWSImageUrlAndSet:self.alChannel.channelImageURL imageView:imageView defaultImage:nil];
         
         imageView.frame = CGRectMake((screenWidth/2)-30, 20, 60, 60);
         imageView.backgroundColor = [UIColor blackColor];
