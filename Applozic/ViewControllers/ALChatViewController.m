@@ -1206,7 +1206,8 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
 {
     ALChannelService *channelService = [[ALChannelService alloc] init];
     self.alChannel = [channelService getChannelByKey:self.channelKey];
-    [titleLabelButton setTitle:self.alChannel.name forState:UIControlStateNormal];
+    NSString *title = self.alChannel.name;
+    [titleLabelButton setTitle:title.length > 22 ? [NSString stringWithFormat:@"%@...", [self.alChannel.name substringToIndex:22]] : title forState:UIControlStateNormal];
     if([self.alChannel isConversationClosed]){
       [self freezeView:YES];
     }
