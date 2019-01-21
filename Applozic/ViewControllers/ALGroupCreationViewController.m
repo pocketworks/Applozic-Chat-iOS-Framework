@@ -310,10 +310,11 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    UIImage * rawImage = [info valueForKey:UIImagePickerControllerEditedImage];
+    UIImage * rawImage = [info valueForKey:UIImagePickerControllerEditedImage] ?: [info valueForKey:UIImagePickerControllerOriginalImage];
+    
     UIImage * normalizedImage = [ALUtilityClass getNormalizedImage:rawImage];
     [self.groupIconView setImage:normalizedImage];
-    
+
     [picker dismissViewControllerAnimated:YES completion:nil];
     self.mainFilePath = [self getImageFilePath:normalizedImage];
     [self confirmUserForGroupImage:normalizedImage];

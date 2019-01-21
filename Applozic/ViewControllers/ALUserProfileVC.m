@@ -437,8 +437,7 @@
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    
-    UIImage * rawImage = [info valueForKey:UIImagePickerControllerEditedImage];
+    UIImage * rawImage = [info valueForKey:UIImagePickerControllerEditedImage] ?: [info valueForKey:UIImagePickerControllerOriginalImage];
     UIImage * normalImage = [ALUtilityClass getNormalizedImage:rawImage];
     [self.profileImage setImage:normalImage];
     
