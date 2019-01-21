@@ -92,7 +92,7 @@
     
     self.mImagePicker = [UIImagePickerController new];
     self.mImagePicker.delegate = self;
-    self.mImagePicker.allowsEditing = YES;
+    //self.mImagePicker.allowsEditing = YES;
     
     if([ALApplozicSettings getColorForNavigation] && [ALApplozicSettings getColorForNavigationItem])
     {

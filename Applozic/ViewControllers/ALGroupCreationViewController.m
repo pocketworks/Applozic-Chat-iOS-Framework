@@ -84,7 +84,7 @@
     
     self.mImagePicker = [[UIImagePickerController alloc] init];
     self.mImagePicker.delegate = self;
-    self.mImagePicker.allowsEditing = YES;
+    //self.mImagePicker.allowsEditing = YES;
     
     [self.activityIndicator setHidesWhenStopped:YES];
 }

@@ -3249,7 +3249,7 @@ style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (granted)
                 {
-                    self.mImagePicker.allowsEditing = YES;
+//                    self.mImagePicker.allowsEditing = YES;
                     self.mImagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
                     self.mImagePicker.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *)kUTTypeImage, nil];
                     [self presentViewController:self.mImagePicker animated:YES completion:nil];
