@@ -286,8 +286,9 @@
             ALSLog(ALLoggerSeverityError, @"Error in logout: %@", error.description);
             [[UIApplication sharedApplication] unregisterForRemoteNotifications];
         }
-        
-        completion(response,error);
+        if (completion) {
+            completion(response,error);
+        }
     }];
 }
 
