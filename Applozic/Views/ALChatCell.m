@@ -478,7 +478,7 @@
         self.mMessageLabel.linkAttributeDefault = @{
                                                     NSFontAttributeName : self.mMessageLabel.font,
                                                     NSForegroundColorAttributeName :[UIColor blueColor],
-                                                    NSUnderlineStyleAttributeName : [NSNumber numberWithInt:NSUnderlineStyleThick]
+                                                    NSUnderlineStyleAttributeName : @(NSUnderlineStyleThick)
                                                     };
     
         if (self.mMessage.message){

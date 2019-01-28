@@ -1752,7 +1752,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
 
     if(theMessage.contentType == ALMESSAGE_CONTENT_LOCATION)
     {
-        ALLocationCell *theCell = (ALLocationCell *)[tableView dequeueReusableCellWithIdentifier:@"LocationCell"];
+        ALLocationCell *theCell = [tableView dequeueReusableCellWithIdentifier:@"LocationCell"];
         theCell.tag = indexPath.row;
         theCell.delegate = self;
         theCell.channel = self.alChannel;
@@ -1763,7 +1763,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
     }
    else  if(theMessage.isLinkMessage)
     {
-        ALLinkCell *theCell = (ALLinkCell *)[tableView dequeueReusableCellWithIdentifier:@"ALLinkCell"];
+        ALLinkCell *theCell = [tableView dequeueReusableCellWithIdentifier:@"ALLinkCell"];
         theCell.tag = indexPath.row;
         theCell.delegate = self;
         theCell.channel = self.alChannel;
@@ -1773,7 +1773,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
         return theCell;
     }
    else if(theMessage.contentType == ALMESSAGE_CONTENT_APP_GALLERY_LINK) {
-       ALImageCell *theCell = (ALImageCell *)[tableView dequeueReusableCellWithIdentifier:@"ImageCell"];
+       ALImageCell *theCell = [tableView dequeueReusableCellWithIdentifier:@"ImageCell"];
        theCell.tag = indexPath.row;
        theCell.delegate = self;
        [theCell populateCell:theMessage viewSize:self.view.frame.size];
@@ -1782,7 +1782,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
     }
     else if([theMessage.fileMeta.contentType hasPrefix:@"image"])
     {
-        ALImageCell *theCell = (ALImageCell *)[tableView dequeueReusableCellWithIdentifier:@"ImageCell"];
+        ALImageCell *theCell = [tableView dequeueReusableCellWithIdentifier:@"ImageCell"];
         theCell.tag = indexPath.row;
         theCell.delegate = self;
         theCell.channel = self.alChannel;
@@ -1793,7 +1793,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
     }
     else if ([theMessage.fileMeta.contentType hasPrefix:@"video"])
     {
-        ALVideoCell *theCell = (ALVideoCell *)[tableView dequeueReusableCellWithIdentifier:@"VideoCell"];
+        ALVideoCell *theCell = [tableView dequeueReusableCellWithIdentifier:@"VideoCell"];
         theCell.tag = indexPath.row;
         theCell.delegate = self;
         theCell.channel = self.alChannel;
@@ -1804,7 +1804,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
     }
     else if ([theMessage.fileMeta.contentType hasPrefix:@"audio"])
     {
-        ALAudioCell *theCell = (ALAudioCell *)[tableView dequeueReusableCellWithIdentifier:@"AudioCell"];
+        ALAudioCell *theCell = [tableView dequeueReusableCellWithIdentifier:@"AudioCell"];
         theCell.tag = indexPath.row;
         theCell.delegate = self;
         theCell.channel = self.alChannel;
@@ -1815,7 +1815,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
     }
     else if (theMessage.contentType == ALMESSAGE_CONTENT_CUSTOM)
     {
-        ALCustomCell * theCell = (ALCustomCell *)[tableView dequeueReusableCellWithIdentifier:@"CustomCell"];
+        ALCustomCell * theCell = [tableView dequeueReusableCellWithIdentifier:@"CustomCell"];
         theCell.tag = indexPath.row;
         theCell.delegate = self;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
@@ -1825,13 +1825,13 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
 
     else if (theMessage.contentType == AV_CALL_CONTENT_THREE)
     {
-        ALVOIPCell * theCell = (ALVOIPCell *)[tableView dequeueReusableCellWithIdentifier:@"VOIPCell"];
+        ALVOIPCell * theCell = [tableView dequeueReusableCellWithIdentifier:@"VOIPCell"];
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         return theCell;
     }
     else if(theMessage.contentType == ALMESSAGE_CHANNEL_NOTIFICATION)
     {
-        ALChannelMsgCell * theCell = (ALChannelMsgCell *)[tableView dequeueReusableCellWithIdentifier:@"ALChannelMsgCell"];
+        ALChannelMsgCell * theCell = [tableView dequeueReusableCellWithIdentifier:@"ALChannelMsgCell"];
         if ([theMessage isMsgHidden]){
             theCell.frame = CGRectZero;
             return theCell;
@@ -1847,7 +1847,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
     }
     else if ([theMessage.fileMeta.contentType length] > 0) // We may have messages with fileMeta but with the wrong Content Type
     {
-        ALDocumentsCell *theCell = (ALDocumentsCell *)[tableView dequeueReusableCellWithIdentifier:@"DocumentsCell"];
+        ALDocumentsCell *theCell = [tableView dequeueReusableCellWithIdentifier:@"DocumentsCell"];
         theCell.tag = indexPath.row;
         theCell.delegate = self;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
@@ -1856,7 +1856,8 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
     }
     else if (theMessage.contentType == ALMESSAGE_CONTENT_DEFAULT)       // textCell
     {
-        ALChatCell *theCell = (ALChatCell *)[tableView dequeueReusableCellWithIdentifier:@"ChatCell"];
+
+        ALChatCell *theCell = [tableView dequeueReusableCellWithIdentifier:@"ChatCell"];
         theCell.tag = indexPath.row;
         theCell.delegate = self;
         theCell.channel = self.alChannel;
@@ -1864,11 +1865,10 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         [self.view layoutIfNeeded];
         return theCell;
-
     }
     else if (theMessage.contentType == ALMESSAGE_CONTENT_VCARD)
     {
-        ALContactMessageCell *theCell = (ALContactMessageCell *)[tableView dequeueReusableCellWithIdentifier:@"ContactMessageCell"];
+        ALContactMessageCell *theCell = [tableView dequeueReusableCellWithIdentifier:@"ContactMessageCell"];
         theCell.tag = indexPath.row;
         theCell.delegate = self;
         theCell.channel = self.alChannel;
@@ -1879,7 +1879,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
     }
     else
     {
-        ALDocumentsCell *theCell = (ALDocumentsCell *)[tableView dequeueReusableCellWithIdentifier:@"DocumentsCell"];
+        ALDocumentsCell *theCell = [tableView dequeueReusableCellWithIdentifier:@"DocumentsCell"];
         theCell.tag = indexPath.row;
         theCell.delegate = self;
         theCell.channel = self.alChannel;
@@ -1902,7 +1902,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.sendMessageTextView resignFirstResponder];
-    ALMessage *msgCell = self.alMessageWrapper.messageArray[indexPath.row];
+    ALMessage *msgCell = self.alMessageWrapper.messageArray[(NSUInteger) indexPath.row];
     if([msgCell.type isEqualToString:@"100"])
     {
         return  nil;
@@ -1915,14 +1915,14 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ALMessage * theMessage = [self.alMessageWrapper getUpdatedMessageArray][indexPath.row];
+    ALMessage * theMessage = [self.alMessageWrapper getUpdatedMessageArray][(NSUInteger) indexPath.row];
     CGFloat cellHeight = [ALUIConstant getCellHeight:theMessage andCellFrame:self.view.frame];
     return cellHeight;
 }
 
 -(BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ALMessage *msgCell = self.alMessageWrapper.messageArray[indexPath.row];
+    ALMessage *msgCell = self.alMessageWrapper.messageArray[(NSUInteger) indexPath.row];
     if([msgCell.type isEqualToString:@"100"] || msgCell.contentType ==(short)ALMESSAGE_CHANNEL_NOTIFICATION)
     {
         return  NO;
