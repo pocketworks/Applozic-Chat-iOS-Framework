@@ -750,6 +750,8 @@
     {
         UIImage *someImage = [ALUtilityClass getImageFromFramworkBundle:alContact.localImageResourceName];
         [memberCell.profileImageView  setImage:someImage];
+        [memberCell.profileImageView setContentMode:UIViewContentModeScaleAspectFill];
+
     }
     else if(alContact.contactImageUrl)
     {
@@ -762,6 +764,7 @@
         memberCell.alphabeticLabel.text = [[alContact getDisplayName] substringToIndex:1];
         NSUInteger randomIndex = random()% [colors count];
         memberCell.profileImageView.image = [ALColorUtility imageWithSize:CGRectMake(0,0,55,55) WithHexString:colors[randomIndex]];
+        [memberCell.profileImageView setContentMode:UIViewContentModeScaleAspectFill];
     }
 }
 
@@ -816,6 +819,7 @@
         imageView.backgroundColor = [UIColor blackColor];
         imageView.clipsToBounds = YES;
         imageView.layer.cornerRadius = imageView.frame.size.width/2;
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 70)];
         view.backgroundColor = [ALApplozicSettings getColorForNavigation];
         

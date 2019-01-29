@@ -105,6 +105,7 @@
     if(imageURL.path.length)
     {
         [BRSImagesDownloader updateImageView:self.groupIconView with:imageURL placeholderImage:nil];
+        self.groupIconView.contentMode = UIViewContentModeScaleAspectFill;
     }
     else
     {
@@ -314,6 +315,7 @@
     
     UIImage * normalizedImage = [ALUtilityClass getNormalizedImage:rawImage];
     [self.groupIconView setImage:normalizedImage];
+    self.groupIconView.contentMode = UIViewContentModeScaleAspectFill;
 
     [picker dismissViewControllerAnimated:YES completion:nil];
     self.mainFilePath = [self getImageFilePath:normalizedImage];

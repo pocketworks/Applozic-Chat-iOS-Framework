@@ -814,7 +814,7 @@
                  
                  contactCell.mUserImageView.layer.cornerRadius = contactCell.mUserImageView.frame.size.width/2;
                  contactCell.mUserImageView.layer.masksToBounds = YES;
-                 contactCell.mUserImageView.contentMode = UIViewContentModeScaleAspectFit;
+                 contactCell.mUserImageView.contentMode = UIViewContentModeScaleAspectFill;
              });
 
             [contactCell.onlineImageMarker setBackgroundColor:[UIColor clearColor]];
@@ -895,6 +895,7 @@
                 ALMessageClientService * messageClientService = [[ALMessageClientService alloc]init];
                 [messageClientService downloadImageUrlAndSet:grpContact.contactImageUrl imageView:contactCell.mUserImageView defaultImage:nil];
                 contactCell.imageNameLabel.hidden = YES;
+                [contactCell.mUserImageView setContentMode:UIViewContentModeScaleAspectFill];
                 nameIcon.hidden=YES;
             }
             else
@@ -936,6 +937,7 @@
         {
             ALMessageClientService * messageClientService = [[ALMessageClientService alloc]init];
             [messageClientService downloadImageUrlAndSet:contact.contactImageUrl imageView:contactCell.mUserImageView defaultImage:@"ic_contact_picture_holo_light.png"];
+            [contactCell.mUserImageView setContentMode:UIViewContentModeScaleAspectFill];
             contactCell.imageNameLabel.hidden = YES;
             nameIcon.hidden= YES;
         }
@@ -972,7 +974,8 @@
     {
         [contactCell.onlineImageMarker setHidden:YES];
     }
-    
+
+    contactCell.mUserImageView.contentMode = UIViewContentModeScaleAspectFill;
 }
 
 /*********************************************  ATTACHMENT ICON & TITLE IN TABLE CELL ******************************************************/
@@ -1298,6 +1301,7 @@
             if(URL)
             {
                 [contactCell.mUserImageView sd_setImageWithURL:URL placeholderImage:nil options:SDWebImageRefreshCached];
+                [contactCell.mUserImageView setContentMode:UIViewContentModeScaleAspectFill];
                 nameIcon.hidden = YES;
             }
             else

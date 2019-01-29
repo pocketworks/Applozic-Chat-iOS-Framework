@@ -258,6 +258,7 @@
     ALContact *alContact = [alContactDBService loadContactByKey:@"userId" value:msgInfo.userId];
     ALMessageClientService * messageClientService = [[ALMessageClientService alloc]init];
     [messageClientService downloadImageUrlAndSet:alContact.contactImageUrl imageView:self.userImage defaultImage:nil];
+    [self.userImage setContentMode:UIViewContentModeScaleAspectFill];
     [self.firstAlphabet setHidden:YES];
     [self.userName setText:[alContact getDisplayName]];
     
@@ -451,7 +452,7 @@
         [view addSubview:textView];
         [view addSubview:imageView];
         [imageView setBackgroundColor:[UIColor clearColor]];
-        [imageView setContentMode:UIViewContentModeScaleAspectFit];
+        [imageView setContentMode:UIViewContentModeScaleAspectFill];
     }
     else
     {
@@ -465,7 +466,7 @@
     [view addSubview:bubbleView];
     [view bringSubviewToFront:textView];
     [view bringSubviewToFront:imageView];
-    
+    [imageView setContentMode:UIViewContentModeScaleAspectFill];
     if ([UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
         textView.textAlignment = NSTextAlignmentRight;
         imageView.transform = CGAffineTransformMakeScale(-1.0, 1.0);
