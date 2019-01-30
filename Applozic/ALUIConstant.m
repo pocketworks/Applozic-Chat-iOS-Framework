@@ -212,7 +212,10 @@
     {
         heightOfCell = [self getCustomChatCellHeight:alMessage andCellFrame:cellFrame];
     }
-    else if (alMessage.contentType == ALMESSAGE_CONTENT_DEFAULT)
+    // for some reason we don't have a document type constant and some document cells were falling into here
+    // and being rtreated as a default cell for size calculations. Added the second clause in this if to make sure
+    // we only go here for cells that don't have any document content.
+    else if ((alMessage.contentType == ALMESSAGE_CONTENT_DEFAULT) && ([alMessage.fileMeta.contentType length] <= 0))
     {
         heightOfCell =[self getChatCellHeight:alMessage andCellFrame:cellFrame];
     }
