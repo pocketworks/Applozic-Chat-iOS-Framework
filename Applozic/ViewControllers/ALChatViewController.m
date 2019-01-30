@@ -3231,8 +3231,17 @@ style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 
 -(void)openDocuments
 {
-    UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"com.adobe.pdf", @"com.microsoft.word.doc", @"com.microsoft.word.xls", @"com.microsoft.powerpoint.​ppt"] inMode: UIDocumentPickerModeImport];
-    
+//    UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"com.adobe.pdf", @"com.microsoft.word.doc", @"com.microsoft.word.xls", @"com.microsoft.powerpoint.​ppt", @"org.openxmlformats.presentationml.presentation", kUTTypePDF] inMode: UIDocumentPickerModeImport];
+
+    UIDocumentPickerViewController* pickerController =
+    [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[(NSString *)kUTTypePDF,
+                                                                    (NSString *)kUTTypeSpreadsheet,
+                                                                    (NSString *)kUTTypePresentation,
+                                                                    (NSString *)kUTTypePresentation,
+                                                                    @"com.microsoft.word.doc",
+                                                                    @"org.openxmlformats.wordprocessingml.document"]
+                                                           inMode: UIDocumentPickerModeImport];
+
     if (pickerController != nil)
     {
         pickerController.delegate = self;
