@@ -162,8 +162,8 @@
 {
     
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Applozic" bundle:[NSBundle bundleForClass:ALChatViewController.class]];
-    UIViewController *theTabBar = [storyboard instantiateViewControllerWithIdentifier:@"messageTabBar"];
-    
+    UITabBarController *theTabBar = [storyboard instantiateViewControllerWithIdentifier:@"messageTabBar"];
+
     //              To Lunch with different Animation...
     //theTabBar.modalTransitionStyle=UIModalTransitionStyleCrossDissolve ;
     
@@ -175,6 +175,15 @@
 
     ALMessagesViewController * msgVC = (ALMessagesViewController *)[[navBAR viewControllers] objectAtIndex:0];
     msgVC.messagesViewDelegate = self;
+    
+    [[theTabBar tabBar] setBarTintColor:[ALApplozicSettings getTabBarBackgroundColour]];
+    [theTabBar.view setTintColor:[ALApplozicSettings getTabBarSelectedItemColour]];
+    
+    if ([tabBAR.tabBar respondsToSelector:@selector(setUnselectedItemTintColor:)])
+    {
+        [tabBAR.tabBar setUnselectedItemTintColor:[ALApplozicSettings getTabBarUnSelectedItemColour]];
+    }
+    
     [viewController presentViewController:theTabBar animated:YES completion:nil];
     
 }
