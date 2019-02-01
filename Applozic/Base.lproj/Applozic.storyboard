@@ -1573,6 +1573,8 @@ Upload Image Button.centerX = scd_profile_BG.centerX + 50</string>
                         <outlet property="notificationTitle" destination="1ch-V6-7WF" id="2cZ-DU-bdN"/>
                         <outlet property="notificationToggle" destination="ssR-vs-NN9" id="O2Q-uB-zDa"/>
                         <outlet property="profileImage" destination="fEQ-TE-P0v" id="SpR-ah-6UK"/>
+                        <outlet property="profileMainImage" destination="Ky4-is-ZmF" id="k2n-KP-LGV"/>
+                        <outlet property="profileMainView" destination="izp-vg-4yT" id="6wd-41-Wdd"/>
                         <outlet property="profileStatus" destination="uPH-8k-6t7" id="cqF-cb-mUT"/>
                         <outlet property="uploadImageButton" destination="nY9-bD-W8V" id="I1R-Xc-UBx"/>
                         <outlet property="userDesignationLabel" destination="d2x-8G-9aN" id="wUS-5t-Hbs"/>
