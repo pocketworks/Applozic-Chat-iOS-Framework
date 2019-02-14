@@ -3055,9 +3055,9 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
         [self openDocuments];
     }]];
 
-    [theController addAction:[UIAlertAction actionWithTitle: NSLocalizedStringWithDefaultValue(@"openAppGallery", nil, [NSBundle mainBundle], @"App Gallery", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self openAppGallery];
-    }]];
+//    [theController addAction:[UIAlertAction actionWithTitle: NSLocalizedStringWithDefaultValue(@"openAppGallery", nil, [NSBundle mainBundle], @"App Gallery", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//        [self openAppGallery];
+//    }]];
 
     if(![ALApplozicSettings isCameraOptionHidden]){
         [theController addAction:[UIAlertAction actionWithTitle:NSLocalizedStringWithDefaultValue(@"takePhotoText", [ALApplozicSettings getLocalizableName], [NSBundle mainBundle], @"Take photo", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -3418,6 +3418,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
                       andViewController:self];
 }
 
+/*
 -(void)openAppGallery
 {
     // TODO Need to make a call into the main library to start this up
@@ -3495,6 +3496,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
         [[NSNotificationCenter defaultCenter] removeObserver:selectToken];
     }];
 }
+*/
 
 -(ALMessage *)getAppGalleryMessage: (NSString*) link
 {
