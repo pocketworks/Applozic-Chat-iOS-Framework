@@ -1069,7 +1069,15 @@
     {
         //toggle the Group view to be visible
         self.groupOrContacts = [NSNumber numberWithInt:SHOW_GROUP];
-        self.filteredContactList = [NSMutableArray arrayWithArray: self.alChannelsList];
+        // CUSTOMBRASS
+        // Remove groups that have the invisible character that was added to the start and end of the name (i.e. TC Groups)
+        //self.filteredContactList = [NSMutableArray arrayWithArray: self.alChannelsList]
+        NSPredicate *filterPredicate = [NSPredicate predicateWithFormat:@"(SELF.%K BEGINSWITH %@) && (SELF.%K ENDSWITH %@)", @"name", @"\u200B", @"name", @"\u200B"];
+        NSArray *removeTheseItems = [self.alChannelsList filteredArrayUsingPredicate:filterPredicate];
+        NSMutableArray *mutableCopy = [self.alChannelsList mutableCopy];
+        [mutableCopy removeObjectsInArray:removeTheseItems];
+        self.filteredContactList = mutableCopy;
+        // END CUSTOMBRASS
     }
     [self.contactsTableView reloadData];
 }
