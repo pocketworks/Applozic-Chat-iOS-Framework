@@ -845,7 +845,15 @@
             }
             else
             {
-                searchResults = [self.alChannelsList filteredArrayUsingPredicate:searchPredicate];
+                // CUSTOMBRASS
+                // Remove groups that have the invisible character that was added to the start and end of the name (i.e. TC Groups)
+                //searchResults = [self.alChannelsList filteredArrayUsingPredicate:searchPredicate];
+                NSPredicate *filterPredicate = [NSPredicate predicateWithFormat:@"(SELF.%K BEGINSWITH %@) && (SELF.%K ENDSWITH %@)", @"name", @"\u200B", @"name", @"\u200B"];
+                NSArray *removeTheseItems = [self.alChannelsList filteredArrayUsingPredicate:filterPredicate];
+                NSMutableArray *mutableCopy = [self.alChannelsList mutableCopy];
+                [mutableCopy removeObjectsInArray:removeTheseItems];
+                searchResults = [mutableCopy filteredArrayUsingPredicate:searchPredicate];
+                // END CUSTOMBRASS
             }
             [self.filteredContactList removeAllObjects];
             [self.filteredContactList addObjectsFromArray:searchResults];
@@ -859,7 +867,15 @@
             }
             else
             {
-                searchResults = [self.alChannelsList filteredArrayUsingPredicate:searchPredicate];
+                // CUSTOMBRASS
+                // Remove groups that have the invisible character that was added to the start and end of the name (i.e. TC Groups)
+                //searchResults = [self.alChannelsList filteredArrayUsingPredicate:searchPredicate];
+                NSPredicate *filterPredicate = [NSPredicate predicateWithFormat:@"(SELF.%K BEGINSWITH %@) && (SELF.%K ENDSWITH %@)", @"name", @"\u200B", @"name", @"\u200B"];
+                NSArray *removeTheseItems = [self.alChannelsList filteredArrayUsingPredicate:filterPredicate];
+                NSMutableArray *mutableCopy = [self.alChannelsList mutableCopy];
+                [mutableCopy removeObjectsInArray:removeTheseItems];
+                searchResults = [mutableCopy filteredArrayUsingPredicate:searchPredicate];
+                // END CUSTOMBRASS
             }
             [self.filteredContactList removeAllObjects];
             [self.filteredContactList addObjectsFromArray:searchResults];
