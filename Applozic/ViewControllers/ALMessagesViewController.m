@@ -289,6 +289,8 @@
 {
     [super viewDidAppear:animated];
 
+    [self.mTableView reloadData];
+
     self.detailChatViewController.contactIds = nil;
     self.detailChatViewController.channelKey = nil;
     self.detailChatViewController.conversationId = nil;
