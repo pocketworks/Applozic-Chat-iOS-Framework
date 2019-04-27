@@ -111,7 +111,7 @@
         
         self.uploadImageButton.layer.cornerRadius = self.uploadImageButton.frame.size.width/2;
         self.uploadImageButton.layer.masksToBounds = YES;
-        
+
         [self.uploadImageButton setBackgroundColor:[ALApplozicSettings getPrimaryColour]];
     });
     

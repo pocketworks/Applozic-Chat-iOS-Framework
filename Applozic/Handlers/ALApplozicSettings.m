@@ -319,7 +319,7 @@
 }
 
 +(void)setCustomMessageTextColor:(UIColor *)color{
-    
+
     NSData * recievedCustomBackgroundColorData = [NSKeyedArchiver archivedDataWithRootObject:color];
     [[NSUserDefaults standardUserDefaults] setValue:recievedCustomBackgroundColorData
                                              forKey:CUSTOM_MSG_TEXT_COLOR];
@@ -1618,7 +1618,7 @@
         return backgroundColor;
     }
     return [UIColor grayColor];
-  
+
 }
 
 +(void) setHideMediaSelectOption:(NSMutableArray*)array{
@@ -1637,6 +1637,53 @@
 
 +(BOOL) videosHiddenInGallery{
     return [self getHideMediaSelectOption] && [[self getHideMediaSelectOption] containsObject:@":video"];
+}
+
++(void)setChannelActionMessageBgColor:(UIColor *)bgColor
+{
+    NSData * bgColorData = [NSKeyedArchiver archivedDataWithRootObject:bgColor];
+    [[NSUserDefaults standardUserDefaults] setObject:bgColorData forKey:AL_CHANNEL_ACTION_MESSAGE_BG_COLOR];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++(UIColor *)getChannelActionMessageBgColor
+{
+    NSData * bgColorData = [[NSUserDefaults standardUserDefaults] objectForKey:AL_CHANNEL_ACTION_MESSAGE_BG_COLOR];
+    UIColor * bgColor = [NSKeyedUnarchiver unarchiveObjectWithData:bgColorData];
+    return bgColor ? bgColor : [UIColor lightGrayColor];
+}
+
++(void)setChannelActionMessageTextColor:(UIColor *)textColor
+{
+    NSData * txtColorData = [NSKeyedArchiver archivedDataWithRootObject:textColor];
+    [[NSUserDefaults standardUserDefaults] setObject:txtColorData forKey:AL_CHANNEL_ACTION_MESSAGE_TEXT_COLOR];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++(UIColor *)getChannelActionMessageTextColor
+{
+    NSData * textColorData = [[NSUserDefaults standardUserDefaults] objectForKey:AL_CHANNEL_ACTION_MESSAGE_TEXT_COLOR];
+    UIColor * txtColor = [NSKeyedUnarchiver unarchiveObjectWithData:textColorData];
+    return txtColor ? txtColor : [UIColor blackColor];
+}
+
++(void)setUserIconFirstNameColorCodes:(NSMutableDictionary*)nsMutableDictionary{
+    [[NSUserDefaults standardUserDefaults] setObject:nsMutableDictionary forKey:AL_ALPHABETIC_COLOR_CODES];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++(NSArray*) getUserIconFirstNameColorCodes{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:AL_ALPHABETIC_COLOR_CODES];
+}
+
++(void) setIsUnblockInChatDisabled:(BOOL)flag {
+    [[NSUserDefaults standardUserDefaults] setBool:flag forKey:DISABLE_UNBLOCK_FROM_CHAT];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++(BOOL) isUnblockInChatDisabled {
+    BOOL key = [[NSUserDefaults standardUserDefaults] boolForKey:DISABLE_UNBLOCK_FROM_CHAT];
+    return key;
 }
 
 @end

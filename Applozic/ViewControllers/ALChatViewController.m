@@ -87,8 +87,7 @@ NSString * const ThirdPartyDetailVCNotificationChannelKey = @"ThirdPartyDetailVC
 @interface ALChatViewController ()<ALMediaBaseCellDelegate, NSURLConnectionDataDelegate, NSURLConnectionDelegate, ALLocationDelegate, ALAudioRecorderViewProtocol, ALAudioRecorderProtocol,
 ALMQTTConversationDelegate, ALAudioAttachmentDelegate, UIPickerViewDelegate, UIPickerViewDataSource,
 UIAlertViewDelegate, ALMUltipleAttachmentDelegate, UIDocumentInteractionControllerDelegate,
-ABPeoplePickerNavigationControllerDelegate, ALSoundRecorderProtocol, ALCustomPickerDelegate, ALImageSendDelegate,
-UIDocumentPickerDelegate>
+                                    ABPeoplePickerNavigationControllerDelegate, ALSoundRecorderProtocol, ALCustomPickerDelegate,ALImageSendDelegate,UIDocumentPickerDelegate>
 
 @property (nonatomic, assign) NSInteger startIndex;
 @property (nonatomic, assign) int rp;
@@ -107,6 +106,7 @@ UIDocumentPickerDelegate>
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *typingLabelBottomConstraint;
 @property (nonatomic, assign) BOOL comingFromBackground;
 @property (nonatomic, strong) ALVideoCoder *videoCoder;
+@property (strong, nonatomic)  NSMutableDictionary *alphabetiColorCodesDictionary;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *nsLayoutconstraintAttachmentWidth;
 
@@ -214,6 +214,7 @@ UIDocumentPickerDelegate>
 
     [self.attachmentOutlet setTintColor:[ALApplozicSettings getAttachmentIconColour]];
     [self.sendButton setTintColor:[ALApplozicSettings getSendIconColour]];
+    self.alphabetiColorCodesDictionary = [ALApplozicSettings getUserIconFirstNameColorCodes];
 
 }
 
@@ -934,7 +935,9 @@ UIDocumentPickerDelegate>
                               }];
 
     [alert addAction:ok];
+    if (![ALApplozicSettings isUnblockInChatDisabled]) {
     [alert addAction:unblock];
+    }
     [self presentViewController:alert animated:YES completion:nil];
 }
 
@@ -1082,7 +1085,7 @@ UIDocumentPickerDelegate>
         ALTopicDetail * topicDetail = [[ALTopicDetail alloc] init];   //WithDictonary:conversation.topicDetailJson];
         topicDetail = conversation.getTopicDetail;
 
-        if(topicDetail.title != nil)
+            if(conversation.getTopicDetail != nil && topicDetail.title != nil)
         {
             [self.conversationTitleList addObject:topicDetail.title];
             [self.pickerConvIdsArray addObject:conversation.Id];
@@ -1758,6 +1761,7 @@ UIDocumentPickerDelegate>
         theCell.delegate = self;
         theCell.channel = self.alChannel;
         theCell.contact = self.alContact;
+        theCell.alphabetiColorCodesDictionary = self.alphabetiColorCodesDictionary;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         [self.view layoutIfNeeded];
         return theCell;
@@ -1769,6 +1773,7 @@ UIDocumentPickerDelegate>
         theCell.delegate = self;
         theCell.channel = self.alChannel;
         theCell.contact = self.alContact;
+        theCell.alphabetiColorCodesDictionary = self.alphabetiColorCodesDictionary;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         [self.view layoutIfNeeded];
         return theCell;
@@ -1788,6 +1793,7 @@ UIDocumentPickerDelegate>
         theCell.delegate = self;
         theCell.channel = self.alChannel;
         theCell.contact = self.alContact;
+        theCell.alphabetiColorCodesDictionary = self.alphabetiColorCodesDictionary;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         [self.view layoutIfNeeded];
         return theCell;
@@ -1799,6 +1805,7 @@ UIDocumentPickerDelegate>
         theCell.delegate = self;
         theCell.channel = self.alChannel;
         theCell.contact = self.alContact;
+        theCell.alphabetiColorCodesDictionary = self.alphabetiColorCodesDictionary;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         [self.view layoutIfNeeded];
         return theCell;
@@ -1810,6 +1817,7 @@ UIDocumentPickerDelegate>
         theCell.delegate = self;
         theCell.channel = self.alChannel;
         theCell.contact = self.alContact;
+        theCell.alphabetiColorCodesDictionary = self.alphabetiColorCodesDictionary;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         [self.view layoutIfNeeded];
         return theCell;
@@ -1819,6 +1827,7 @@ UIDocumentPickerDelegate>
         ALCustomCell * theCell = [tableView dequeueReusableCellWithIdentifier:@"CustomCell"];
         theCell.tag = indexPath.row;
         theCell.delegate = self;
+        theCell.colourDictionary = self.alphabetiColorCodesDictionary;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         [self.view layoutIfNeeded];
         return theCell;
@@ -1827,6 +1836,7 @@ UIDocumentPickerDelegate>
     else if (theMessage.contentType == AV_CALL_CONTENT_THREE)
     {
         ALVOIPCell * theCell = [tableView dequeueReusableCellWithIdentifier:@"VOIPCell"];
+        theCell.colourDictionary = self.alphabetiColorCodesDictionary;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         return theCell;
     }
@@ -1842,7 +1852,7 @@ UIDocumentPickerDelegate>
         theCell.delegate = self;
         theCell.channel = self.alChannel;
         theCell.contact = self.alContact;
-        [theCell populateCell:theMessage viewSize:self.view.frame.size];
+        theCell.colourDictionary = self.alphabetiColorCodesDictionary;
         [self.view layoutIfNeeded];
         return theCell;
     }
@@ -1863,6 +1873,7 @@ UIDocumentPickerDelegate>
         theCell.delegate = self;
         theCell.channel = self.alChannel;
         theCell.contact = self.alContact;
+        theCell.colourDictionary = self.alphabetiColorCodesDictionary;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         [self.view layoutIfNeeded];
         return theCell;
@@ -1874,6 +1885,7 @@ UIDocumentPickerDelegate>
         theCell.delegate = self;
         theCell.channel = self.alChannel;
         theCell.contact = self.alContact;
+        theCell.alphabetiColorCodesDictionary = self.alphabetiColorCodesDictionary;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         [self.view layoutIfNeeded];
         return theCell;
@@ -1885,6 +1897,7 @@ UIDocumentPickerDelegate>
         theCell.delegate = self;
         theCell.channel = self.alChannel;
         theCell.contact = self.alContact;
+        theCell.alphabetiColorCodesDictionary = self.alphabetiColorCodesDictionary;
         [theCell populateCell:theMessage viewSize:self.view.frame.size];
         [self.view layoutIfNeeded];
         return theCell;
@@ -2050,6 +2063,9 @@ UIDocumentPickerDelegate>
 
     ALTopicDetail * topicDetail = [[ALTopicDetail alloc] init];//WithJSONString:alConversationProxy.topicDetailJson];
     topicDetail = alConversationProxy.getTopicDetail;
+    if(topicDetail == nil){
+        return  [[UIView alloc]init];
+    }
 
     // Image View ....
     UIImageView *imageView = [[UIImageView alloc] init];
@@ -3129,6 +3145,8 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
         }]];
     }
 
+
+
     if(![ALApplozicSettings isPhotoGalleryOptionHidden]){
         NSString *attachmentMenuDefaultText = nil;
         if([ALApplozicSettings videosHiddenInGallery] && [ALApplozicSettings imagesHiddenInGallery]){
@@ -3198,41 +3216,6 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
     ALVCardClass *vcardClass = [[ALVCardClass alloc] init];
     NSString *contactFilePath = [vcardClass saveContactToDocDirectory:contact];
     [self processAttachment:contactFilePath andMessageText:@"" andContentType:ALMESSAGE_CONTENT_VCARD];
-}
-
-#pragma mark - UIDocumentPickerDelegate
-
-- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
-{
-    if (urls.count > 0)
-    {
-        NSURL *filePath =  urls.firstObject;
-        NSString * filename = filePath.lastPathComponent;
-
-        NSURL * dst = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
-        dst = [dst URLByAppendingPathComponent:filename];
-
-        NSLog(@"Document Picker URL\nsrc: %@\ndst: %@", filePath.path, dst.path);
-
-        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath: [dst path]];
-
-        if (fileExists)
-        {
-            [[NSFileManager defaultManager] removeItemAtPath:[dst path] error:nil];
-        }
-
-        NSError* error;
-        if ([[NSFileManager defaultManager] moveItemAtURL:filePath toURL:dst error:&error] == NO)
-        {
-            NSLog(@"Could not move item %@", [error localizedDescription]);
-            if ([error code] != NSFileWriteFileExistsError)
-            {
-                return;
-            }
-        }
-
-        [self processAttachment:[dst path] andMessageText:@"" andContentType:ALMESSAGE_CONTENT_ATTACHMENT];
-    }
 }
 
 //==============================================================================================================================================
@@ -5141,6 +5124,39 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
 
     self.messageReplyId = messageKey;
     [self processAttachment:filePath andMessageText:nil andContentType:ALMESSAGE_CONTENT_ATTACHMENT];
+}
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
+{
+    if (urls.count > 0)
+    {
+        NSURL *filePath =  urls.firstObject;
+        NSString * filename = filePath.lastPathComponent;
+
+        NSURL * dst = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
+        dst = [dst URLByAppendingPathComponent:filename];
+
+        NSLog(@"Document Picker URL\nsrc: %@\ndst: %@", filePath.path, dst.path);
+
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath: [dst path]];
+
+        if (fileExists)
+        {
+            [[NSFileManager defaultManager] removeItemAtPath:[dst path] error:nil];
+        }
+
+        NSError* error;
+        if ([[NSFileManager defaultManager] moveItemAtURL:filePath toURL:dst error:&error] == NO)
+        {
+            NSLog(@"Could not move item %@", [error localizedDescription]);
+            if ([error code] != NSFileWriteFileExistsError)
+            {
+                return;
+            }
+        }
+
+        [self processAttachment:[dst path] andMessageText:@"" andContentType:ALMESSAGE_CONTENT_ATTACHMENT];
+    }
 }
 
 @end
