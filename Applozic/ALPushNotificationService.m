@@ -65,6 +65,8 @@
         NSError *error = nil;
         NSDictionary *theMessageDict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
         NSString *notificationMsg = [theMessageDict valueForKey:@"message"];
+        NSDictionary * metadataDictionary =  [theMessageDict valueForKey:@"messageMetaData"];
+
 
         //CHECK for any special messages...
         if ([self processMetaData:theMessageDict withAlert:alertValue withUpdateUI:updateUI])
@@ -89,7 +91,7 @@
                 }
 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self assitingNotificationMessage:notificationMsg andDictionary:dict];
+                    [self assitingNotificationMessage:notificationMsg andDictionary:dict withMetadata:metadataDictionary];
                 });
             }
             else
@@ -110,8 +112,7 @@
 
              ALSLog(ALLoggerSeverityInfo, @"ALPushNotificationService's SYNC CALL");
             [dict setObject:(alertValue ? alertValue : @"") forKey:@"alertValue"];
-
-            [self assitingNotificationMessage:notificationMsg andDictionary:dict];
+             [self assitingNotificationMessage:notificationMsg andDictionary:dict withMetadata:metadataDictionary];
 
         }
         else if ([type isEqualToString:@"MESSAGE_SENT"]||[type isEqualToString:@"APPLOZIC_02"])
@@ -315,6 +316,37 @@
                 }];
             }
         
+        } else if( [type isEqualToString:@"APPLOZIC_33"]){
+            NSString* keyString;
+            NSString* deviceKey;
+            @try
+            {
+                NSDictionary * message = [theMessageDict objectForKey:@"message"];
+                ALMessage *alMessage = [[ALMessage alloc] initWithDictonary:message];
+                keyString = alMessage.key;
+                deviceKey = alMessage.deviceKey;
+            } @catch (NSException * exp) {
+                ALSLog(ALLoggerSeverityError, @"Error while fetching message from dictionary : %@", exp.description);
+                @try
+                {
+                    NSString * messageKey = [theMessageDict valueForKey:@"message"];
+                    if(messageKey){
+                        ALMessageDBService * messagedbService = [[ALMessageDBService alloc]init];
+                        DB_Message * dbMessage  = (DB_Message *)[messagedbService getMessageByKey:@"key" value:messageKey];
+                        if (dbMessage != nil) {
+                            deviceKey = dbMessage.deviceKey;
+                        }
+                    }
+                } @catch (NSException * exp) {
+                    ALSLog(ALLoggerSeverityError, @"Error while fetching message from dictionary : %@", exp.description);
+                }
+            }
+            if (deviceKey != nil && [deviceKey isEqualToString:[ALUserDefaultsHandler getDeviceKeyString]]) {
+                return TRUE;
+            }
+            [ALMessageService syncMessageMetaData:[ALUserDefaultsHandler getDeviceKeyString] withCompletion:^(NSMutableArray *message, NSError *error) {
+                ALSLog(ALLoggerSeverityInfo, @"Successfully updated message metadata");
+            }];
         }
         else
         {
@@ -327,8 +359,13 @@
     return FALSE;
 }
 
--(void)assitingNotificationMessage:(NSString*)notificationMsg andDictionary:(NSMutableDictionary*)dict
+-(void)assitingNotificationMessage:(NSString*)notificationMsg andDictionary:(NSMutableDictionary*)dict withMetadata:(NSDictionary *)messageMetaData
 {
+
+    if([self isNotificationDisabled:messageMetaData]){
+        return;
+    }
+
     ALPushAssist* assistant = [[ALPushAssist alloc] init];
     if(!assistant.isOurViewOnTop)
     {
@@ -348,6 +385,16 @@
                                                            userInfo:dict];
     }
 
+}
+
+-(BOOL)isNotificationDisabled:(NSDictionary*)messageMetaData{
+
+    if(!messageMetaData){
+        return NO;
+    }
+
+    NSString * notificationFlag = [messageMetaData objectForKey:@"show"];
+    return (messageMetaData && notificationFlag && [notificationFlag isEqualToString:@"false"]);
 }
 
 -(BOOL)processMetaData:(NSDictionary*)dict withAlert:alertValue withUpdateUI:(NSNumber *)updateUI
@@ -373,12 +420,17 @@
     NSArray *mqttMSGArray = [[theMessageDict valueForKey:@"message"] componentsSeparatedByString:@":"];
     NSString *BlockType = mqttMSGArray[0];
     NSString *userId = mqttMSGArray[1];
-    if(![BlockType isEqualToString:@"BLOCKED_BY"] && ![BlockType isEqualToString:@"UNBLOCKED_BY"])
+    ALContactDBService *dbService = [ALContactDBService new];
+    if([BlockType isEqualToString:@"BLOCKED_BY"] || [BlockType isEqualToString:@"UNBLOCKED_BY"])
     {
+        [dbService setBlockByUser:userId andBlockedByState:flag];
+    } else if([BlockType isEqualToString:@"BLOCKED_TO"] || [BlockType isEqualToString:@"UNBLOCKED_TO"])
+    {
+        [dbService setBlockUser:userId andBlockedState:flag];
+    } else {
         return NO;
     }
-    ALContactDBService *dbService = [ALContactDBService new];
-    [dbService setBlockByUser:userId andBlockedByState:flag];
+
     if(self.realTimeUpdate){
         [self.realTimeUpdate onUserBlockedOrUnBlocked:userId andBlockFlag:flag];
     }

@@ -41,12 +41,12 @@
 {
     [super populateCell:alMessage viewSize:viewSize];
     
-    [self.mMessageLabel setFont:[self getDynamicFontWithDefaultSize:[ALApplozicSettings getChatCellTextFontSize] fontName:@"Helvetica"]];
+    [self.mMessageLabel setFont:[self getDynamicFontWithDefaultSize:[ALApplozicSettings getChannelCellTextFontSize] fontName:[ALApplozicSettings getCustomMessageFont]]];
     
     [self.mMessageLabel setTextAlignment:NSTextAlignmentCenter];
     [self.mMessageLabel setText:alMessage.message];
     [self.mMessageLabel setBackgroundColor:[UIColor clearColor]];
-    [self.mMessageLabel setTextColor:[UIColor whiteColor]];
+    [self.mMessageLabel setTextColor:[ALApplozicSettings getChannelActionMessageTextColor]];
 
     [self.mDateLabel setHidden:YES];
     self.mUserProfileImageView.alpha = 0;
@@ -67,7 +67,7 @@
     CGRect frame = CGRectMake(theTextPoint.x, theTextPoint.y,
                               bubbleWidth, theTextSize.height + (2 * padding));
     
-    self.mBubleImageView.backgroundColor = [UIColor colorWithRed:60.0f/255.0 green:16.0f/255.0f blue:83.0f/255.0f alpha:1.0f];
+    self.mBubleImageView.backgroundColor = [ALApplozicSettings getChannelActionMessageBgColor];
     [self.mBubleImageView setFrame:frame];
     [self.mBubleImageView setHidden:NO];
     
