@@ -1853,6 +1853,7 @@ UIAlertViewDelegate, ALMUltipleAttachmentDelegate, UIDocumentInteractionControll
         theCell.channel = self.alChannel;
         theCell.contact = self.alContact;
         theCell.colourDictionary = self.alphabetiColorCodesDictionary;
+        [theCell populateCell:theMessage viewSize:self.view.frame.size];
         [self.view layoutIfNeeded];
         return theCell;
     }
